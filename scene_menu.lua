@@ -12,6 +12,7 @@ function scene_menu_init()
         add_box(e2,"hey hey!")
         wait(3)
         add_box(e2,"what can i do for you?")
+        wait(8)
     end
     add_new_routine(dialog_anim,ROUTINE_DIALOG)
 
@@ -24,7 +25,7 @@ end
 
 function scene_menu_draw()
     cls()
-    draw_dialog_box()
+    draw_dialog_box(not routines_has_type_of(ROUTINE_DIALOG))
     --draw_enemies()
 end
 
