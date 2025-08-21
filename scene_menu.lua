@@ -13,7 +13,7 @@ function scene_menu_init()
         wait(3)
         add_box(e2,"what can i do for you?")
     end
-    add_new_routine(dialog_anim)
+    add_new_routine(dialog_anim,ROUTINE_DIALOG)
 
 
 end

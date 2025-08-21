@@ -1,20 +1,21 @@
+ROUTINE_DIALOG = "dialog"
 routines = {}
 dialog_control = {
     message = "",
     current_index = 0,
-    speaker = ""
-
+    speaker = "",
 }
 
 -- Call this in the _update function to update eat routine in the table
 function update_routines_manager()
     for r in all(routines) do
-        if costatus(r) == "dead" then
+        if costatus(r.routine) == "dead" then
             del(routines,r)
         else
-            assert(coresume(r))
+            assert(coresume(r.routine))
         end
     end
+
 end
 
 -- add new routine to routines table
@@ -29,8 +30,12 @@ end
  end
  add_new_routine(full_animation)
 ]]
-function add_new_routine(new_func)
-    add(routines,cocreate(new_func))
+function add_new_routine(new_func,type)
+    local co_item = {
+        type = type,
+        routine = cocreate(new_func)
+    }
+    add(routines,co_item)
 end
 
 function add_box(obj,text,typing_speed)
@@ -59,7 +64,7 @@ end
 
 function draw_dialog_box()
     local char_w_h = 8
-    local text={
+    local text = {
         x = 4,
         y = 116,
         color = 7
@@ -82,7 +87,6 @@ function draw_dialog_box()
    -- dialog box and frame for speaker
    local speaker_box_y_offset = 11
    local speaker_box_x_offset = 2
-
    local speaker_box = {
        x = text.x ,
        y = text.y - speaker_box_y_offset,
