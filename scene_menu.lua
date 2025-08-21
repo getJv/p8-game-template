@@ -2,13 +2,19 @@ function scene_menu_init()
     _update = scene_menu_update
     _draw = scene_menu_draw
 
-    local e1 = add_new_enemy()
-    local e1_anim = function()
-        update_animation(e1,"x",120) -- go right
-        wait(10)
-        update_animation(e1,"x",10,30,ease_in_elastic) -- go right
+    local e1 = add_new_enemy("bob")
+    local e2 = add_new_enemy("ana banana")
+
+
+    local dialog_anim = function()
+        add_box(e1,"hello there?")
+        wait(8)
+        add_box(e2,"hey hey!")
+        wait(3)
+        add_box(e2,"what can i do for you?")
     end
-    add_new_routine(e1_anim)
+    add_new_routine(dialog_anim)
+
 
 end
 
@@ -18,6 +24,7 @@ end
 
 function scene_menu_draw()
     cls()
-    draw_enemies()
+    draw_dialog_box()
+    --draw_enemies()
 end
 

@@ -1,4 +1,10 @@
 routines = {}
+dialog_control = {
+    message = "",
+    current_index = 0,
+    speaker = ""
+
+}
 
 -- Call this in the _update function to update eat routine in the table
 function update_routines_manager()
@@ -27,19 +33,22 @@ function add_new_routine(new_func)
     add(routines,cocreate(new_func))
 end
 
-function update_animation(obj,key,target_point,frames,anim_function)
-    local initial_point = obj[key]
-    frames = frames or 30
-    anim_function = anim_function or linear
-    for i=1,frames do
-        local time = anim_function(i/frames) -- time is update based on anim_function type
-        obj[key] = lerp(initial_point,target_point,time)
-        yield()
-    end
-end
+function add_box(obj,text,typing_speed)
+    dialog_control.current_index = 0
+    dialog_control.message = ""
+    dialog_control.speaker = obj
+    typing_speed = typing_speed or 5
 
-function linear(t)
-    return t
+    while dialog_control.current_index < #text do
+        dialog_control.current_index = dialog_control.current_index + 1
+        dialog_control.message = sub(text, 1, dialog_control.current_index)
+
+        -- waiting frames...
+        for i = 1, typing_speed do
+            yield()
+        end
+    end
+
 end
 
 function wait(frames)
@@ -48,10 +57,39 @@ function wait(frames)
     end
 end
 
--- a: from, b: to, t: time
-function lerp(a,b,t)
-    return a + (b - a) * t
+function draw_dialog_box()
+    local char_w_h = 8
+    local text={
+        x = 4,
+        y = 116,
+        color = 7
+    }
+    local box_offset = 3
+    local box = {
+        x = text.x - box_offset,
+        y = text.y - box_offset,
+        w = 120,
+        h = char_w_h,
+        bg_color =5,
+        border_color=3
+    }
+
+   -- dialog box and frame for dialog
+   rectfill(box.x ,box.y,box.w,text.y + box.h,box.bg_color)
+   rect(box.x,box.y,box.w,text.y + box.h,box.border_color)
+   print(dialog_control.message,text.x,text.y,text.color)
+
+   -- dialog box and frame for speaker
+   local speaker_box_y_offset = 11
+   local speaker_box_x_offset = 2
+
+   local speaker_box = {
+       x = text.x ,
+       y = text.y - speaker_box_y_offset,
+       w = dialog_control.speaker.name_w + char_w_h - speaker_box_x_offset,
+       h = text.y - speaker_box_y_offset + char_w_h
+   }
+   rectfill(speaker_box.x ,speaker_box.y,speaker_box.w,speaker_box.h,box.border_color)
+   print(dialog_control.speaker.name,speaker_box.x + speaker_box_x_offset ,speaker_box.y + speaker_box_x_offset,text.color)
+
 end
-
-
-
