@@ -6,7 +6,11 @@ function add_new_enemy(enemy_name)
         name_w = print(enemy_name,0,0,7,true),
         x = rnd(120) + 5,
         y = rnd(120) + 5,
-        color =  rnd(12)+1
+        color =  rnd(12)+1,
+        anim = {
+            curr = "idle",
+            idle = {1,2},
+        }
 
     }
     add(enemies,new_enemy)

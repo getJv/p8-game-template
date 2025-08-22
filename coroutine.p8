@@ -4,6 +4,7 @@ __lua__
 
 #include debug.lua
 #include enemies.lua
+#include dialog.lua
 #include routines.lua
 #include scene_menu.lua
 #include pre_loader.lua
