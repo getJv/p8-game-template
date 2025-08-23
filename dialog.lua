@@ -100,7 +100,7 @@ function dialog_draw()
     local speaker_box = {
     x = text.x ,
     y = text.y - speaker_box_y_offset,
-    w = dialog_control.speaker.name_w + char_w_h - speaker_box_x_offset,
+    w = dialog_control.speaker.name_width + char_w_h - speaker_box_x_offset,
     h = text.y - speaker_box_y_offset + char_w_h
     }
     rectfill(speaker_box.x ,speaker_box.y,speaker_box.w,speaker_box.h,box.border_color)
