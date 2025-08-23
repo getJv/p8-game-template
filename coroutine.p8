@@ -3,7 +3,7 @@ version 42
 __lua__
 
 #include debug.lua
-#include enemies.lua
+#include actors.lua
 #include dialog.lua
 #include routines.lua
 #include scene_menu.lua

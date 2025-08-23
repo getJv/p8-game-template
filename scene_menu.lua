@@ -2,8 +2,23 @@ function scene_menu_init()
     _update = scene_menu_update
     _draw = scene_menu_draw
 
-    local e1 = add_new_enemy("bob")
-    local e2 = add_new_enemy("ana banana")
+    local e1 = actors_add_new("bob")
+    local e2 = actors_add_new(
+            "ana banana",
+            10,
+            10,
+            8,
+            8,
+            {
+                curr_anim = "idle",
+                curr_spr_index = 1,
+                spr_w = 1,
+                spr_h = 1,
+                idle = {1,2},
+                top = {3,4},
+                right = {5,6},
+                bottom = {5,6},
+            })
 
     local dialog_anim = function()
         dialog_add(e1,"hello there?")
@@ -25,6 +40,6 @@ end
 function scene_menu_draw()
     cls()
     dialog_draw()
-    --draw_enemies()
+    actors_draw()
 end
 
