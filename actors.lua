@@ -1,3 +1,4 @@
+ROUTINE_ACTOR_ANIM = "actor_anim"
 actors = {}
 
 --[[
@@ -47,9 +48,50 @@ function actors_add_new(actor_name, x, y,w,h, anim,color)
         color = color or rnd(14) +1
     }
     add(actors, new_actor)
+
+    if( new_actor.anim ~= "") then
+        routines_add_new(
+                function()
+                    actor_routine_anim(new_actor)
+                end
+                ,ROUTINE_ACTOR_ANIM
+        )
+    end
+
     return new_actor
 end
 
+function _actor_curr_anim_sprs(actor)
+    return actor.anim[actor.anim.curr_anim]
+end
+
+--[[
+actor_routine_anim
+ - update the actor sprites to keep animation alive
+ - lower frames fast updates. default is 12
+
+deps:
+    - routines_wait:routines.lua
+
+]]
+function actor_routine_anim(actor,frames)
+    frames = frames or 12
+    for i = 1, #_actor_curr_anim_sprs(actor) do
+        actor.anim.curr_spr_index = i
+        routines_wait(frames)
+        if(i == #_actor_curr_anim_sprs(actor)) then
+            actor.anim.curr_spr_index = 1
+            actor_routine_anim(actor)
+        end
+    end
+end
+
+--[[
+actors_draw
+ - draw the actors sprites or default square
+ - should be call at _scene _draw section
+
+]]
 function actors_draw()
     for i = 1, #actors do
         local e = actors[i]

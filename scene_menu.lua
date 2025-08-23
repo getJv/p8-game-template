@@ -39,7 +39,7 @@ end
 
 function scene_menu_draw()
     cls()
-    dialog_draw()
     actors_draw()
+    dialog_draw()
 end
 
