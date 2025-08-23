@@ -26,9 +26,10 @@ actors_add_new(
       spr_w = 1,
       spr_h = 1,
       idle = {1,2},
-      top = {3,4},
+      up = {3,4},
       right = {5,6},
-      bottom = {5,6},
+      down = {7,8},
+      left = {9,10}
     },
     13
  )
