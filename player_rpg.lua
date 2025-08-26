@@ -33,38 +33,54 @@ player_controls_update
  - manager the waking of player
 ]]
 function player_controls_update()
+
+    local new_x = player.x
+    local new_y = player.y
+
     if btn(1) and btn(3) then -- right down
-        player.x += 1
-        player.y += 1
+        new_x += 1
+        new_y += 1
         _actor_update_anim(player, "right")
     elseif btn(0) and btn(3) then -- left down
-        player.x -= 1
-        player.y += 1
+        new_x -= 1
+        new_y += 1
         _actor_update_anim(player, "left")
     elseif btn(1) and btn(2) then -- right up
-        player.x += 1
-        player.y -= 1
+        new_x += 1
+        new_y -= 1
         _actor_update_anim(player, "right")
     elseif btn(0) and btn(2) then -- left up
-        player.x -= 1
-        player.y -= 1
+        new_x -= 1
+        new_y -= 1
         _actor_update_anim(player, "left")
     elseif btn(0) then -- left
-        player.x -= 1
+        new_x -= 1
         _actor_update_anim(player, "left")
     elseif btn(1) then -- right
-        player.x += 1
+        new_x += 1
         _actor_update_anim(player, "right")
     elseif btn(2) then -- up
-        player.y -= 1
+        new_y -= 1
         _actor_update_anim(player, "up")
     elseif btn(3) then -- down
-        player.y += 1
+        new_y += 1
         _actor_update_anim(player, "down")
     elseif btn() == 0 then
         _actor_update_anim(player, "idle")
     end
+
+    if edges_collision(new_x,new_y,player.w,player.h) then
+       return
+    end
+
+    player.x = new_x
+    player.y = new_y
+
 end
+
+
+
+
 function _actor_update_anim(actor, anim_key)
     if (actor.anim.curr_anim ~= anim_key) then
         actor.anim.curr_anim = anim_key

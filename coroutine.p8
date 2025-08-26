@@ -3,6 +3,7 @@ version 42
 __lua__
 
 #include debug.lua
+#include utils.lua
 #include actors.lua
 #include dialog.lua
 #include player_rpg.lua
