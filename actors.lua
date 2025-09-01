@@ -54,8 +54,9 @@ function actors_add_new(actor_name, x, y,w,h, anim,color)
         routines_add_new(
                 function()
                     actor_routine_anim(new_actor)
-                end
-                ,ROUTINE_ACTOR_ANIM
+                end,
+                ROUTINE_ACTOR_ANIM,
+                "update_actor_spr_" .. actor_name
         )
     end
 

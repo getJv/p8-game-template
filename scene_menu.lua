@@ -15,7 +15,7 @@ function scene_menu_init()
         dialog_add(player, "what can i do for you?")
         routines_wait(8)
     end
-    routines_add_new(dialog_anim, ROUTINE_DIALOG)
+    routines_add_new(dialog_anim, ROUTINE_DIALOG,"dialog_test")
 
 end
 
@@ -25,6 +25,7 @@ function scene_menu_update()
 
     routines_manager_update()
     player_controls_update()
+    dialog_continue_update()
 
 end
 
@@ -32,5 +33,7 @@ function scene_menu_draw()
     cls()
     actors_draw()
     dialog_draw()
+    routines_manager_draw()
+
 end
 
