@@ -8,7 +8,7 @@ function scene_menu_init()
 
     --set dialogs actors
     local dialog_anim = function()
-        dialog_add(e1, "hello there?")
+        dialog_add(e1, "hello there?",3)
         routines_wait(8)
         dialog_add(player, "hey hey!")
         routines_wait(3)
@@ -32,8 +32,9 @@ end
 function scene_menu_draw()
     cls()
     actors_draw()
-    dialog_draw()
+    dialog_frame("hahahah","ana")
     routines_manager_draw()
+    debug_draw_rules()
 
 end
 

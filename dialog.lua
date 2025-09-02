@@ -20,12 +20,12 @@ dialog_control = {
     end,
     waiting_confirmation_to_continue = true -- trigger flag. player should press X to continue
 }
-dialog_text = {
+--[[dialog_text = {
     x = 4,
     y = 116,
     color = 7
 }
-box_offset = 3 -- padding left and top
+box_offset = 3 -- padding left and top]]
 
 --[[
 dialog_add
@@ -64,8 +64,10 @@ function dialog_add(obj, text, typing_speed)
     end
     -- start the press X animation after a dialog box
     while dialog_control.waiting_confirmation_to_continue do
-        _start_press_x_animation()
         yield()
+        if not dialog_control.should_draw() then
+           -- _start_press_x_animation()
+        end
     end
 end
 
@@ -77,7 +79,7 @@ function _start_press_x_animation()
             -- waiting frames...
             if(show) then
                 for i=1,10 do
-                    print("❎", dialog_control.message_width + box_offset * 2,dialog_text.y)
+                    print("❎", dialog_control.message_width * 2,dialog_text.y)
                     yield()
                 end
             end
@@ -95,7 +97,7 @@ end
 
 -- Should be called at the _update it will trigger the dialog to continue
 function dialog_continue_update()
-    if btn(5) then
+    if btn(5)  then
         dialog_control.waiting_confirmation_to_continue = false
     end
 end
@@ -115,41 +117,46 @@ function scene_menu_draw()
 end
 ```
 ]]
-function dialog_draw()
 
-    if(dialog_control.should_draw()) then
-        _dialog_reset()
-        return
-    end
 
-    local char_w_h = 8
+dialog_frame_obj = {
+    x = 4,
+    y = 113,
+    w = 119,
+    h = 10,
+    box_bg_color = 5, -- grey
+    box_border_color = 3, -- dark green
+    box_txt_color = 7, -- white
+    box_p_top = 3, -- padding top
+    box_p_left = 3, -- padding left
+    tab_name_h = 8,
+    tab_m_left = 4 -- margin left
+}
 
-    local box = {
-        x = dialog_text.x - box_offset,
-        y = dialog_text.y - box_offset,
-        w = 120,
-        h = char_w_h,
-        bg_color = 5,
-        border_color = 3
-    }
-
-    -- dialog box and frame for dialog
-    rectfill(box.x, box.y, box.w, dialog_text.y + box.h, box.bg_color)
-    rect(box.x, box.y, box.w, dialog_text.y + box.h, box.border_color)
-
-    print(dialog_control.message, dialog_text.x, dialog_text.y, dialog_text.color)
-
+function dialog_frame(new_txt, speaker_name)
+    -- dialog box and border frame for dialog
+    rectfill(dialog_frame_obj.x, dialog_frame_obj.y, dialog_frame_obj.x + dialog_frame_obj.w, dialog_frame_obj.y + dialog_frame_obj.h, dialog_frame_obj.box_bg_color)
+    rect(dialog_frame_obj.x, dialog_frame_obj.y, dialog_frame_obj.x + dialog_frame_obj.w, dialog_frame_obj.y + dialog_frame_obj.h, dialog_frame_obj.box_border_color)
+    -- print the message inside the box
+    print(new_txt, dialog_frame_obj.x + dialog_frame_obj.box_p_left, dialog_frame_obj.y+ dialog_frame_obj.box_p_top, dialog_frame_obj.box_txt_color)
     -- dialog box and frame for speaker
-    local speaker_box_y_offset = 11
-    local speaker_box_x_offset = 2
-    local speaker_box = {
-        x = dialog_text.x,
-        y = dialog_text.y - speaker_box_y_offset,
-        w = dialog_control.speaker.name_width + char_w_h - speaker_box_x_offset,
-        h = dialog_text.y - speaker_box_y_offset + char_w_h
+    local name_tab = {
+        x =  dialog_frame_obj.x + dialog_frame_obj.tab_m_left,
+        y = dialog_frame_obj.y - dialog_frame_obj.tab_name_h,
     }
-    rectfill(speaker_box.x, speaker_box.y, speaker_box.w, speaker_box.h, box.border_color)
-    print(dialog_control.speaker.name, speaker_box.x + speaker_box_x_offset, speaker_box.y + speaker_box_x_offset, dialog_text.color)
+    rectfill(
+            name_tab.x,
+            name_tab.y,
+            name_tab.x + (#speaker_name * letter_width) + 4, -- 4 is the padding x
+            name_tab.y + dialog_frame_obj.tab_name_h,
+            dialog_frame_obj.box_border_color
+    )
+    print(
+            speaker_name,
+            name_tab.x + 3,
+            name_tab.y + 2,
+            dialog_frame_obj.box_txt_color
+    )
 
 end
 
@@ -158,8 +165,6 @@ _dialog_reset
  - internal function
  - set the dialog_control to initial state
  - the optional `obj` param is the speaker of next dialog
-
-
 ]]
 function _dialog_reset(obj)
     dialog_control.current_index = 0
