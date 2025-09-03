@@ -40,7 +40,6 @@ function actors_add_new(actor_name, x, y,w,h, anim,color)
 
     local new_actor = {
         name = actor_name or "",
-        name_width = print(actor_name,0,0,7,true) or "",
         x = x or rnd(120) + 5,
         y = y or rnd(120) + 5,
         w = w or 8,

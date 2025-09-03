@@ -99,8 +99,11 @@ function routines_add_new(new_func, type,uniq_id)
 
 end
 
-function routines_wait(frames)
+function routines_wait(frames,cb_among_yields)
     for i=1,frames do
+        if(cb_among_yields) then
+            cb_among_yields()
+        end
         yield()
     end
 end

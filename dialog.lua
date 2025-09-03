@@ -2,30 +2,31 @@
 dialog.lua
 - contains the dialog register logic
 - rely on routines system
-
 dependencies:
- - routines.lua:routines_has_type_of
-
+ - routines.lua
 ]]
 
-ROUTINE_DIALOG = "dialog"
+-- dialog_control function settings controls the dialog pace
 dialog_control = {
     message = "",
-    message_width = 0, -- used to calculate the spot to show the X btn confirm animation
     current_index = 0,
-    speaker = "",
-    typing_speed = 5,
-    should_draw = function() -- cb function to show the dialog box
-        return not routines_has_type_of(ROUTINE_DIALOG)
-    end,
+    typing_speed = 3,
     waiting_confirmation_to_continue = true -- trigger flag. player should press X to continue
 }
---[[dialog_text = {
-    x = 4,
-    y = 116,
-    color = 7
+-- _dialog_frame function settings. controls the dialog box layout
+dialog_frame_obj = {
+    x = 4, -- left dialog box
+    y = 113, -- top dialog box
+    w = 119, -- right dialog box
+    h = 10, -- bottom dialog box
+    box_bg_color = 5, -- grey
+    box_border_color = 3, -- dark green
+    box_txt_color = 7, -- white
+    box_p_top = 3, -- padding top
+    box_p_left = 3, -- padding left
+    tab_name_h = 8, -- how tall is the dialog box
+    tab_m_left = 4 -- margin left
 }
-box_offset = 3 -- padding left and top]]
 
 --[[
 dialog_add
@@ -50,90 +51,51 @@ usage sample:
 ]]
 function dialog_add(obj, text, typing_speed)
     _dialog_reset(obj)
-    dialog_control.message_width = print(text,0,0,true)
     typing_speed = typing_speed or dialog_control.typing_speed
+
+    local print_x_btn = true -- control the toggle animation to the button x
 
     while dialog_control.current_index < #text do
         dialog_control.current_index = dialog_control.current_index + 1
         dialog_control.message = sub(text, 1, dialog_control.current_index)
-
-        -- waiting frames...
-        for i = 1, typing_speed do
-            yield()
-        end
+        -- waiting frames to print next dialog character
+        routines_wait(typing_speed,function()
+            _dialog_frame(dialog_control.message,obj.name)
+        end)
     end
-    -- start the press X animation after a dialog box
+
+    -- starts waiting for the user press X to continue the dialog
     while dialog_control.waiting_confirmation_to_continue do
-        yield()
-        if not dialog_control.should_draw() then
-           -- _start_press_x_animation()
+        if(print_x_btn) then -- prints the message with the btn_x for 10 frames
+            routines_wait(10,function()
+                _dialog_frame(dialog_control.message,obj.name)
+                print(
+                        "❎",
+                        #dialog_control.message * letter_width + 8, -- 2 is the text margin right
+                        dialog_frame_obj.y + dialog_frame_obj.box_p_top
+                )
+                _dialog_check_if_user_pressed_x_to_continue()
+            end)
         end
+        print_x_btn = not print_x_btn
+        routines_wait(5,function() -- prints the message without the btn_x for 5 frames
+            _dialog_frame(dialog_control.message,obj.name)
+            _dialog_check_if_user_pressed_x_to_continue()
+        end)
     end
 end
 
--- Render the X animation to let the player know which button press to continue
-function _start_press_x_animation()
-    local press_x_btn_anim = function()
-        local show = true
-        while dialog_control.waiting_confirmation_to_continue do
-            -- waiting frames...
-            if(show) then
-                for i=1,10 do
-                    print("❎", dialog_control.message_width * 2,dialog_text.y)
-                    yield()
-                end
-            end
-            show = not show
-            routines_wait(5)
-        end
-    end
-    routines_add_new(function()
-        press_x_btn_anim()
-    end,
-            ROUTINE_DRAW,
-            "press_x_btn_anim"
-    )
-end
-
--- Should be called at the _update it will trigger the dialog to continue
-function dialog_continue_update()
-    if btn(5)  then
+function _dialog_check_if_user_pressed_x_to_continue()
+    if btn(5) then -- 5 is the btn 5
         dialog_control.waiting_confirmation_to_continue = false
     end
 end
-
-
-
 --[[
-dialog_draw
- - Should be called in the last position of the _draw section
- - the `skip` param if true will reset the dialog and stop drawing
-
-usage example
-```
-function scene_menu_draw()
-   cls()
-   dialog_draw(not routines_has_type_of(ROUTINE_DIALOG))
-end
-```
+_dialog_frame
+ - internal function
+ - draw the dialog box, tab name and dialog text
 ]]
-
-
-dialog_frame_obj = {
-    x = 4,
-    y = 113,
-    w = 119,
-    h = 10,
-    box_bg_color = 5, -- grey
-    box_border_color = 3, -- dark green
-    box_txt_color = 7, -- white
-    box_p_top = 3, -- padding top
-    box_p_left = 3, -- padding left
-    tab_name_h = 8,
-    tab_m_left = 4 -- margin left
-}
-
-function dialog_frame(new_txt, speaker_name)
+function _dialog_frame(new_txt, speaker_name)
     -- dialog box and border frame for dialog
     rectfill(dialog_frame_obj.x, dialog_frame_obj.y, dialog_frame_obj.x + dialog_frame_obj.w, dialog_frame_obj.y + dialog_frame_obj.h, dialog_frame_obj.box_bg_color)
     rect(dialog_frame_obj.x, dialog_frame_obj.y, dialog_frame_obj.x + dialog_frame_obj.w, dialog_frame_obj.y + dialog_frame_obj.h, dialog_frame_obj.box_border_color)
@@ -159,17 +121,13 @@ function dialog_frame(new_txt, speaker_name)
     )
 
 end
-
 --[[
 _dialog_reset
  - internal function
  - set the dialog_control to initial state
- - the optional `obj` param is the speaker of next dialog
 ]]
-function _dialog_reset(obj)
+function _dialog_reset()
     dialog_control.current_index = 0
     dialog_control.message = ""
-    dialog_control.message_width = 0
-    dialog_control.speaker = obj or ""
     dialog_control.waiting_confirmation_to_continue = true
 end
