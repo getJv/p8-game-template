@@ -18,6 +18,7 @@ function player_init()
             8,
             {
                 curr_anim = "idle",
+                curr_anim_frames = 12,
                 curr_spr_index = 1,
                 spr_w = 1,
                 spr_h = 1,

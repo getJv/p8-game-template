@@ -1,5 +1,6 @@
 routines = {}
 ROUTINE_DRAW = "draw"
+ROUTINE_UPDATE = "update"
 
 -- Call this in the _update function to update each routine in the table not DRAW type
 function routines_manager_update()

@@ -1,4 +1,3 @@
-ROUTINE_ACTOR_ANIM = "actor_anim"
 actors = {}
 
 --[[
@@ -22,6 +21,7 @@ actors_add_new(
    8,
    {
       curr_anim = "idle",
+      curr_anim_frames = 12,
       curr_spr_index = 0,
       spr_w = 1,
       spr_h = 1,
@@ -44,30 +44,31 @@ function actors_add_new(actor_name, x, y,w,h, anim,color)
         y = y or rnd(120) + 5,
         w = w or 8,
         h = h or 8,
-        anim = anim or "",
-        color = color or rnd(14) +1
+        anim = anim or "", -- anim is an object
+        color = color or rnd(14) +1,
     }
     add(actors, new_actor)
 
     if( new_actor.anim ~= "") then
+        -- routine to draw the sprite sequence
         routines_add_new(
                 function()
-                    actor_routine_anim(new_actor)
+                    actor_routine_anim_draw(new_actor)
                 end,
-                ROUTINE_ACTOR_ANIM,
-                "update_actor_spr_" .. actor_name
+                ROUTINE_DRAW,
+                "draw_actor_" .. actor_name
         )
     end
-
     return new_actor
 end
 
-function _actor_curr_anim_sprs(actor)
-    return actor.anim[actor.anim.curr_anim]
-end
+--[[
+TODO: player have the sprites updated by the user controls. but new actors
+will need a kind of routine update the will set the curr_anim after some trigger...
+]]
 
 --[[
-actor_routine_anim
+actor_routine_anim_draw
  - update the actor sprites to keep animation alive
  - lower frames fast updates. default is 12
 
@@ -75,43 +76,38 @@ deps:
     - routines_wait:routines.lua
 
 ]]
-function actor_routine_anim(actor,frames)
-    frames = frames or 12
-    for i = 1, #_actor_curr_anim_sprs(actor) do
-        actor.anim.curr_spr_index = i
-        routines_wait(frames)
-        if(i == #_actor_curr_anim_sprs(actor)) then
-            actor.anim.curr_spr_index = 1
-            actor_routine_anim(actor)
+function actor_routine_anim_draw(actor)
+    while true do
+        for i = 1, #actor.anim[actor.anim.curr_anim] do
+            actor.anim.curr_spr_index = i
+            routines_wait(actor.anim.curr_anim_frames, function()
+                _actor_drawing(actor)
+            end)
         end
+        actor.anim.curr_spr_index = 1 -- go to first sprite
     end
+
 end
-
 --[[
-actors_draw
+_actor_drawing
  - draw the actors sprites or default square
- - should be call at _scene _draw section
-
 ]]
-function actors_draw()
-    for i = 1, #actors do
-        local e = actors[i]
-        if e.anim == "" then
+function _actor_drawing(actor)
+        if actor.anim == "" then
             rectfill(
-                    e.x,
-                    e.y,
-                    e.x+e.w,
-                    e.y+e.h,
-                    e.color
+                    actor.x,
+                    actor.y,
+                    actor.x+actor.w,
+                    actor.y+actor.h,
+                    actor.color
             )
-            print(i, e.x+e.w/4+1, e.y+e.h/4, 7)
+            print(i, actor.x+actor.w/4+1, actor.y+actor.h/4, 7)
         else
             spr(
-                e.anim[e.anim.curr_anim][e.anim.curr_spr_index], -- :D beautiful hum?
-                e.x,e.y,e.anim.spr_w,e.anim.spr_h
+                    actor.anim[actor.anim.curr_anim][actor.anim.curr_spr_index], -- :D beautiful hum?
+                    actor.x,actor.y,actor.anim.spr_w,actor.anim.spr_h
             )
         end
-    end
 end
 
 

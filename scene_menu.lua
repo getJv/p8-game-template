@@ -29,7 +29,6 @@ end
 
 function scene_menu_draw()
     cls()
-    actors_draw()
     routines_manager_draw()
     debug_draw_rules()
 
