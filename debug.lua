@@ -18,3 +18,13 @@ function debug_obj_lines(obj,color)
     --bottom horizontal
     line(0 ,obj.y + obj.h , 127, obj.y + obj.h, color)
 end
+--[[
+    clean the screen and print a string value then stop the game
+]]
+function debug_dd(value,x,y)
+    x = x or 5
+    y = x or 5
+    print("debug:",2,0,7)
+    print(value,x,y + 5,7)
+    stop()
+end
