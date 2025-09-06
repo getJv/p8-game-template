@@ -11,6 +11,7 @@ deps
 ]]
 function player_init()
     player = actors_add_new(
+            "player",
             "ana banana",
             10,
             10,

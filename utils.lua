@@ -34,3 +34,19 @@ function edges_collision(new_x,new_y,obj_w,obj_h)
     end
     return false
 end
+
+function str_trim(s)
+    -- Remove leading whitespace
+    local start = 1
+    while sub(s, start, start) == " " or sub(s, start, start) == "\t" do
+        start = start + 1
+    end
+
+    -- Remove trailing whitespace
+    local finish = #s
+    while finish >= start and (sub(s, finish, finish) == " " or sub(s, finish, finish) == "\t") do
+        finish = finish - 1
+    end
+
+    return sub(s, start, finish)
+end

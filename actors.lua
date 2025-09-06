@@ -14,6 +14,7 @@ usage example:
 
 ```
 actors_add_new(
+   "player_1",
    "ana",
    10,
    10,
@@ -36,9 +37,9 @@ actors_add_new(
 ```
 
 ]]
-function actors_add_new(actor_name, x, y,w,h, anim,color)
-
+function actors_add_new(actor_id,actor_name, x, y,w,h, anim,color)
     local new_actor = {
+        id = actor_id,
         name = actor_name or "",
         x = x or rnd(120) + 5,
         y = y or rnd(120) + 5,

@@ -22,6 +22,7 @@ end
     clean the screen and print a string value then stop the game
 ]]
 function debug_dd(value,x,y)
+    cls()
     x = x or 5
     y = x or 5
     print("debug:",2,0,7)
