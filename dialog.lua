@@ -6,7 +6,12 @@ dependencies:
  - routines.lua
 ]]
 
--- dialog_control function settings controls the dialog pace
+-- store the group of dialogs
+dialogs = {
+    current = 0,
+    items = {}
+}
+-- dialog_control function settings controls the current dialog
 dialog_control = {
     message = "",
     current_index = 0,
@@ -29,30 +34,69 @@ dialog_frame_obj = {
 }
 
 --[[
-dialog_add
- - register a speech to a speaker
- - Allow set a custom type_speed
+dialog_create
+ - add a group os speeches to the collection
 
-usage sample:
- - better usage in the _init or preload
  ```
    local e1 = add_new_enemy("bob")
-   local e2 = add_new_enemy("ana banana")
-   local dialog_anim = function()
-      dialog_add(e1,"hello there?")
-      wait(8)
-      dialog_add(e2,"hey hey!")
-      wait(3)
-      dialog_add(e2,"what can i do for you?")
-      wait(8)
-   end
-   add_new_routine(dialog_anim,ROUTINE_DIALOG)
+   local player = add_new_enemy("ana banana")
+   dialog_create(
+            "initial_chat",
+            function()
+                dialog_speech(e1, "hello there?")
+                dialog_speech(player, "hey hey!")
+                dialog_speech(player, "what can i do for you?")
+            end
+    )
 ```
 ]]
-function dialog_add(obj, text, typing_speed)
+function dialog_create(dialog_id,cb_with_speeches)
+    add(dialogs.items,{
+        id = dialog_id,
+        cb_with_speeches = cb_with_speeches
+    })
+end
+
+--[[
+dialog_start
+ - queue the dialog group to routines tbl, if the dialog_id exist
+
+]]
+function dialog_start(dialog_id)
+    if dialogs.current == 0 then
+        local items = tbl_filter(dialogs.items, function(i)
+            return i.id == dialog_id
+        end)
+        dialogs.current = dialog_id
+        routines_add_new(
+                items[1].cb_with_speeches,
+                ROUTINE_DRAW,
+                dialog_id
+        )
+    end
+end
+
+--[[
+dialog_speech
+ - add a speech to a actor
+ - typing_speed is how fast the text is written in the screen. Higher the num, slower will be
+
+ ```
+   local e1 = add_new_enemy("bob")
+   local player = add_new_enemy("ana banana")
+   dialog_create(
+            "initial_chat",
+            function()
+                dialog_speech(e1, "hello there?")
+                dialog_speech(player, "hey hey!")
+                dialog_speech(player, "what can i do for you?")
+            end
+    )
+```
+]]
+function dialog_speech(obj, text, typing_speed)
     _dialog_reset(obj)
     typing_speed = typing_speed or dialog_control.typing_speed
-
     local print_x_btn = true -- control the toggle animation to the button x
 
     while dialog_control.current_index < #text do
