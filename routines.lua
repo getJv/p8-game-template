@@ -5,7 +5,8 @@ ROUTINE_UPDATE = "update"
 -- Call this in the _update function to update each routine in the table not DRAW type
 function routines_manager_update()
     _routines_iterate(
-            routines_filter(
+            tbl_filter(
+                    routines,
                     function(r)
                         return r.type ~= ROUTINE_DRAW
                     end
@@ -16,7 +17,8 @@ end
 -- Call this in the _draw function to update each routine type DRAW in the table
 function routines_manager_draw()
     _routines_iterate(
-            routines_filter(
+            tbl_filter(
+                    routines,
                     function(r)
                         return r.type == ROUTINE_DRAW
                     end
@@ -33,28 +35,6 @@ function _routines_iterate(routines_list)
             assert(coresume(r.routine))
         end
     end
-end
-
---[[ routines_filter
- - filter the routines using a  callback func like in javascript
- - return a table with the true comparison filter
-example:
-```
-local result_search = routines_filter(
-            function(r)
-                return r.uniq_id == uniq_id
-            end
-    )
-```
-]]--
-function routines_filter(filter_func)
-    local filtered = {}
-    for r in all(routines) do
-        if(filter_func(r)) then
-            add(filtered,r)
-        end
-    end
-    return filtered
 end
 
 -- Return true if the routine table still have routines in the given type
@@ -87,7 +67,7 @@ function routines_add_new(new_func, type,uniq_id)
         routine = cocreate(new_func)
     }
 
-    local result_search = routines_filter(
+    local result_search = tbl_filter(routines,
             function(r)
                 return r.uniq_id == uniq_id
             end
