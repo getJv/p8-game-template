@@ -87,14 +87,16 @@ function scene_menu_draw()
         bg_color = 5,
         border_color = 6
     }
-
-    rectfill(box.x,box.y,box.x +box.w,box.y + box.h,box.bg_color)
-    rect(box.x,box.y,box.x +box.w,box.y + box.h,box.border_color)
+    local box_bottom_y =  box.y + box.h
+    local box_right_x = box.x +box.w
+    rectfill(box.x,box.y,box_right_x,box_bottom_y,box.bg_color)
+    rect(box.x,box.y,box_right_x,box_bottom_y,box.border_color)
     local row_pos = {
         x = box.x + 2,
-        y = box.y + 5
+        y = box.y + 15
     }
-
+    print("shopping",row_pos.x+2,box.y + 3,7)
+    line(row_pos.x+2,box.y + 10,box_right_x-4,box.y + 10,7)
     for i,item in ipairs(options) do
         local text_color = 7
         if(i == cursor.pos) then
@@ -107,6 +109,10 @@ function scene_menu_draw()
         print(amount_in_basket(item.id) .. "/" .. item.available, row_pos.x + 68 ,row_pos.y,text_color)
         row_pos.y = row_pos.y + 8
     end
+    line(row_pos.x+2,box_bottom_y-10,box_right_x-4,box_bottom_y-10,7)
+    print("cancel",row_pos.x + 10,box_bottom_y-7,7)
+    local confirm = "confirm"
+    print(confirm,box_right_x - 10 - #confirm * letter_width,box_bottom_y-7,7)
 
 
 end
