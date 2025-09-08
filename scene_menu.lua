@@ -11,7 +11,7 @@ options = {
         id = "potion",
         name = "potion",
         available = 3,
-        cost = 1,
+        cost = 50,
         sprite = 15
     },
     {
@@ -73,6 +73,14 @@ function scene_menu_update()
 
 end
 
+function basket_total()
+    local value = 0
+    for i in all(basket) do
+        value = value + i.cost
+    end
+    return value
+end
+
 function scene_menu_draw()
     cls()
     routines_manager_draw()
@@ -104,11 +112,14 @@ function scene_menu_draw()
             text_color = 12
         end
         print("$" .. item.cost, row_pos.x + 10 ,row_pos.y,text_color) -- 10 is 8 for sprite + 2 of margin
-        print(item.name, row_pos.x + 22 ,row_pos.y,text_color)
+        print(item.name, row_pos.x + 24 ,row_pos.y,text_color)
 
         print(amount_in_basket(item.id) .. "/" .. item.available, row_pos.x + 68 ,row_pos.y,text_color)
         row_pos.y = row_pos.y + 8
     end
+    local total = "total: $" .. basket_total()
+    print(total,box_right_x - 6 - #total * letter_width,row_pos.y + 4,7)
+
     line(row_pos.x+2,box_bottom_y-10,box_right_x-4,box_bottom_y-10,7)
     print("cancel",row_pos.x + 10,box_bottom_y-7,7)
     local confirm = "confirm"
