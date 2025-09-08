@@ -1,3 +1,30 @@
+menu_select = {
+    is_open = true
+}
+cursor = {
+    spr = 16,
+    pos = 1,
+}
+
+options = {
+    {
+        id = "potion",
+        name = "potion",
+        available = 3,
+        cost = 1,
+        sprite = 15
+    },
+    {
+        id = "antidote",
+        name = "antidote",
+        available = 1,
+        cost = 5,
+        sprite = 15
+    },
+}
+
+basket = {}
+
 function scene_menu_init()
     _update = scene_menu_update
     _draw = scene_menu_draw
@@ -19,7 +46,26 @@ end
 function scene_menu_update()
 
     routines_manager_update()
-    player_controls_update()
+    if (not menu_select.is_open) then
+        player_controls_update()
+    end
+
+    local cursor_item = options[cursor.pos]
+
+    if btnp(3) then -- up item
+        cursor.pos = cursor.pos + 1
+    end
+    if btnp(2) then -- down item
+        cursor.pos = cursor.pos - 1
+    end
+    if btnp(0) then -- left decrease
+            del(basket,cursor_item)
+    end
+    if btnp(1) then -- right increase
+        if amount_in_basket(cursor_item.id) < cursor_item.available then
+            add(basket,options[cursor.pos])
+        end
+    end
 
     if btn(4) then
         dialog_start("initial_chat")
@@ -33,5 +79,45 @@ function scene_menu_draw()
     --TODO: a new kind of ROUTINE_DRAW_Z1..9 will be need to filter routines to be drew over others... aka: routines_manager_draw_z1()
     debug_draw_rules()
 
+    local box = {
+        x = 20,
+        y = 20,
+        w = 88,
+        h = 88,
+        bg_color = 5,
+        border_color = 6
+    }
+
+    rectfill(box.x,box.y,box.x +box.w,box.y + box.h,box.bg_color)
+    rect(box.x,box.y,box.x +box.w,box.y + box.h,box.border_color)
+    local row_pos = {
+        x = box.x + 2,
+        y = box.y + 5
+    }
+
+    for i,item in ipairs(options) do
+        local text_color = 7
+        if(i == cursor.pos) then
+            spr(cursor.spr,row_pos.x,row_pos.y)
+            text_color = 12
+        end
+        print("$" .. item.cost, row_pos.x + 10 ,row_pos.y,text_color) -- 10 is 8 for sprite + 2 of margin
+        print(item.name, row_pos.x + 22 ,row_pos.y,text_color)
+
+        print(amount_in_basket(item.id) .. "/" .. item.available, row_pos.x + 68 ,row_pos.y,text_color)
+        row_pos.y = row_pos.y + 8
+    end
+
+
+end
+
+--[[
+amount_in_basket
+    return the number of a current item in the basket
+]]
+function amount_in_basket(product_id)
+    return #tbl_filter(basket,function(b)
+        return product_id == b.id
+    end)
 end
 
