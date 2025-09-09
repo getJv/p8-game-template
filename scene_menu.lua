@@ -4,6 +4,7 @@ menu_select = {
 cursor = {
     spr = 16,
     pos = 1,
+    onAction = ""
 }
 
 options = {
@@ -51,12 +52,21 @@ function scene_menu_update()
     end
 
     local cursor_item = options[cursor.pos]
+    local next_cursor_pos = ""
+    if btnp(3) then -- down item
+        next_cursor_pos = cursor.pos + 1
+        if cursor.pos  < #options then
+            cursor.pos = next_cursor_pos
+        else
+            cursor.pos = 0 -- is cancelAction
+        end
 
-    if btnp(3) then -- up item
-        cursor.pos = cursor.pos + 1
     end
-    if btnp(2) then -- down item
-        cursor.pos = cursor.pos - 1
+    if btnp(2) then -- up item
+        if cursor.pos > 1 then
+            cursor.pos = cursor.pos - 1
+            cursor.onAction = ""
+        end
     end
     if btnp(0) then -- left decrease
             del(basket,cursor_item)
@@ -121,7 +131,13 @@ function scene_menu_draw()
     print(total,box_right_x - 6 - #total * letter_width,row_pos.y + 4,7)
 
     line(row_pos.x+2,box_bottom_y-10,box_right_x-4,box_bottom_y-10,7)
-    print("cancel",row_pos.x + 10,box_bottom_y-7,7)
+    if(cursor.pos == 0) then
+        spr(cursor.spr,row_pos.x,box_bottom_y-7)
+        print("cancel",row_pos.x + 10,box_bottom_y-7,12)
+    else
+        print("cancel",row_pos.x + 10,box_bottom_y-7,7)
+    end
+
     local confirm = "confirm"
     print(confirm,box_right_x - 10 - #confirm * letter_width,box_bottom_y-7,7)
 
