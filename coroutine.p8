@@ -6,10 +6,13 @@ __lua__
 #include utils.lua
 #include actors.lua
 #include dialog.lua
+#include shopping.lua
 #include player_rpg.lua
 #include routines.lua
 #include scene_menu.lua
 #include pre_loader.lua
+
+
 
 __gfx__
 00000000022222200000000002222220022222200222222002222220022222200222222002222220022222200005500000055000000550000000000000000000
