@@ -1,9 +1,10 @@
 shopping = {
-    is_open = false
-}
-cursor = {
-    spr = 16,
-    pos = 1,
+    is_open = false,
+    cursor = {
+        spr = 16,
+        pos = 1,
+    }
+
 }
 
 basket = {}
@@ -49,25 +50,25 @@ end
 function shopping_cursor_routine_update(options)
 
     while shopping.is_open do
-        local cursor_item = options[cursor.pos]
+        local cursor_item = options[shopping.cursor.pos]
         if btnp(3) then -- down item
-            if cursor.pos < #options then
-                cursor.pos = cursor.pos + 1
+            if shopping.cursor.pos < #options then
+                shopping.cursor.pos = shopping.cursor.pos + 1
             else
-                cursor.pos = #options + 1 -- is cancelAction
+                shopping.cursor.pos = #options + 1 -- is cancelAction
             end
 
         end
         if btnp(2) then -- up item
-            if cursor.pos > 1 then
-                cursor.pos = cursor.pos - 1
+            if shopping.cursor.pos > 1 then
+                shopping.cursor.pos = shopping.cursor.pos - 1
             else
-                cursor.pos = #options + 1 -- is cancelAction
+                shopping.cursor.pos = #options + 1 -- is cancelAction
             end
         end
         if btnp(0) then -- left decrease
-            if cursor.pos > #options then
-                cursor.pos =  #options + 1
+            if shopping.cursor.pos > #options then
+                shopping.cursor.pos =  #options + 1
             else
                 del(basket,cursor_item)
             end
@@ -75,15 +76,15 @@ function shopping_cursor_routine_update(options)
 
         end
         if btnp(1) then -- right increase
-            if cursor.pos > #options then
-                cursor.pos =  #options + 2
+            if shopping.cursor.pos > #options then
+                shopping.cursor.pos =  #options + 2
             else
                 if amount_in_basket(cursor_item.id) < cursor_item.available then
-                    add(basket,options[cursor.pos])
+                    add(basket,options[shopping.cursor.pos])
                 end
             end
         end
-        if #options + 2 and btnp(5) then
+        if #options + 2 == shopping.cursor.pos and btnp(5) then
             shopping.is_open = false
         end
         yield()
@@ -119,8 +120,8 @@ function shopping_routine_drawing(options)
         line(row_pos.x+2,box.y + 10,box_right_x-4,box.y + 10,7)
         for i,item in ipairs(options) do
             local text_color = 7
-            if(i == cursor.pos) then
-                spr(cursor.spr,row_pos.x,row_pos.y)
+            if(i == shopping.cursor.pos) then
+                spr(shopping.cursor.spr,row_pos.x,row_pos.y)
                 text_color = 12
             end
             print("$" .. item.cost, row_pos.x + 10 ,row_pos.y,text_color) -- 10 is 8 for sprite + 2 of margin
@@ -133,16 +134,16 @@ function shopping_routine_drawing(options)
         print(total,box_right_x - 6 - #total * letter_width,row_pos.y + 4,7)
 
         line(row_pos.x+2,box_bottom_y-10,box_right_x-4,box_bottom_y-10,7)
-        if cursor.pos == (#options + 1) then -- is cancel option
-            spr(cursor.spr,row_pos.x,box_bottom_y-7)
+        if shopping.cursor.pos == (#options + 1) then -- is cancel option
+            spr(shopping.cursor.spr,row_pos.x,box_bottom_y-7)
             print("cancel",row_pos.x + 10,box_bottom_y-7,12)
         else
             print("cancel",row_pos.x + 10,box_bottom_y-7,7)
         end
 
         local confirm = "confirm"
-        if cursor.pos == (#options + 2) then -- is confirm option
-            spr(cursor.spr,box_right_x - 20 - #confirm * letter_width ,box_bottom_y-7)
+        if shopping.cursor.pos == (#options + 2) then -- is confirm option
+            spr(shopping.cursor.spr,box_right_x - 20 - #confirm * letter_width ,box_bottom_y-7)
             print(confirm,box_right_x - 10 - #confirm * letter_width,box_bottom_y-7,12)
         else
             print(confirm,box_right_x - 10 - #confirm * letter_width,box_bottom_y-7,7)
