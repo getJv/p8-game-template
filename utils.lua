@@ -50,3 +50,21 @@ function str_trim(s)
 
     return sub(s, start, finish)
 end
+
+function tbl_from_string(str_data)
+    local list = {}
+    for line in all(split(str_data, '\n')) do -- split lines
+        local obj = {}
+        line = str_trim(line)
+        if #line > 0 then -- remove possible extra lines
+            for entry in all(split(line, ';')) do -- split lines
+                local parties = split(entry, '=')
+                if #parties > 1 then
+                    obj[parties[1]] = parties[2]
+                end
+            end
+            add(list,obj)
+        end
+    end
+    return list
+end

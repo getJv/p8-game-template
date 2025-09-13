@@ -21,11 +21,24 @@ end
 --[[
     clean the screen and print a string value then stop the game
 ]]
-function debug_dd(value,x,y)
+function debug_dd(value,should_stop,x,y)
     cls()
     x = x or 5
     y = x or 5
+    should_stop = should_stop or true
     print("debug:",2,0,7)
-    print(value,x,y + 5,7)
-    stop()
+    if type(value) == "table" then
+        local currentY = y + 5
+        currentY = currentY + 8
+        for k, v in pairs(value) do
+            print(tostring(k) .. ": " .. tostring(v), x, currentY, 7)
+            currentY = currentY + 8
+        end
+    else
+        print(value, x, y + 5, 7)
+    end
+    if(should_stop) then
+        stop()
+    end
 end
+

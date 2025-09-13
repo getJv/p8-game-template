@@ -6,38 +6,50 @@ shopping = {
     }
 
 }
-
 basket = {}
+stores = {}
 
-function shopping_open()
-    local shopping_cb = function()
+
+--[[ store_create
+ - Register the store in a list of stores and prepare the routine callback
+]]
+function store_create(store_id, tbl_string_options)
+    stores[store_id] = function()
         shopping_routine_draw(
-                {
-                    {
-                        id = "potion",
-                        name = "potion",
-                        available = 3,
-                        cost = 50,
-                        sprite = 15
-                    },
-                    {
-                        id = "antidote",
-                        name = "antidote",
-                        available = 1,
-                        cost = 5,
-                        sprite = 15
-                    },
-                }
+                tbl_from_string(tbl_string_options)
         )
     end
+end
 
+function shopping_open(store_id)
     routines_add_new(
-            shopping_cb,
+            stores[store_id],
             ROUTINE_DRAW,
             'shopping_id'
     )
 end
 
+--[[
+shopping_routine_update
+    open the store with the given option
+example:
+```
+routines_add_new(
+            function()
+                shopping_routine_draw(
+                        [[
+                        id=potion;name=potion;available=3;cost=50;sprite=15
+                        id=antidote;name=antidote;available=5;cost=5;sprite=15
+                        ]\]
+                )
+                end,
+                ROUTINE_DRAW,
+                'shopping_id'
+)
+
+```
+
+]]
 function shopping_routine_update(options)
 
     local total_items = #options
@@ -147,7 +159,6 @@ function shopping_routine_draw(options)
 
         yield()
     end
-
 end
 
 function _shopping_basket_total()
