@@ -51,7 +51,23 @@ function str_trim(s)
     return sub(s, start, finish)
 end
 
-function tbl_from_string(str_data)
+
+--[[
+ - convert a multline string in a arraylist of objects
+ - if you just have one-line remember to use the key access myResult[1]
+ 0 is single_obj is true it return a obj interad of a list
+
+ ```
+ example:
+ local tt = tbl_from_string([[
+            is_open=false;cursor_spr=16;cursor_pos=1
+        ]\])[1]
+ -- tt is now a object in a tbl: {{is_open=false,...}}
+```
+
+
+]]
+function tbl_from_string(str_data,single_obj)
     local list = {}
     for line in all(split(str_data, '\n')) do -- split lines
         local obj = {}
@@ -59,12 +75,23 @@ function tbl_from_string(str_data)
         if #line > 0 then -- remove possible extra lines
             for entry in all(split(line, ';')) do -- split lines
                 local parties = split(entry, '=')
+                local value = parties[2]
                 if #parties > 1 then
-                    obj[parties[1]] = parties[2]
+                    -- Convert value to the appropriate type
+                    if value == "true" then
+                        value = true
+                    elseif value == "false" then
+                        value = false
+                    end
+
+                    obj[parties[1]] = value
                 end
             end
             add(list,obj)
         end
+    end
+    if single_obj then
+        return list[1]
     end
     return list
 end
