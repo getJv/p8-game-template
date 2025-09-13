@@ -6,7 +6,7 @@ __lua__
 #include utils.lua
 #include actors.lua
 #include dialog.lua
-#include shopping.lua
+#include store.lua
 #include player_rpg.lua
 #include routines.lua
 #include scene_menu.lua

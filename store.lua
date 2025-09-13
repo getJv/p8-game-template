@@ -1,8 +1,8 @@
-shopping_initial_values = [[
+store_initial_values = [[
             is_open=false;cursor_spr=16;cursor_pos=1
         ]]
 
-shopping = tbl_from_string(shopping_initial_values,true)
+store = tbl_from_string(store_initial_values,true)
 
 basket = {}
 stores = {}
@@ -15,7 +15,7 @@ store_box = tbl_from_string([[
 ]]
 function store_create(store_id, tbl_string_options)
     stores[store_id] = function()
-        shopping_routine_draw(
+        store_routine_draw(
                 tbl_from_string(tbl_string_options)
         )
     end
@@ -26,10 +26,10 @@ function store_close(confirmed)
         print("check out not implemented")
     end
     basket = {}
-    shopping = tbl_from_string(shopping_initial_values,true)
+    store = tbl_from_string(store_initial_values,true)
 end
 
-function shopping_open(store_id)
+function store_open(store_id)
     routines_add_new(
             stores[store_id],
             ROUTINE_DRAW,
@@ -58,12 +58,12 @@ routines_add_new(
 ```
 
 ]]
-function shopping_routine_update(options)
+function store_routine_update(options)
 
     local total_items = #options
-    local current_cursor_pos = shopping.cursor_pos
+    local current_cursor_pos = store.cursor_pos
     local cursor_item = 1
-    while shopping.is_open do
+    while store.is_open do
         if current_cursor_pos <= total_items then -- prevent nil error if cancel(total_items +1) or confirm (total_items+2) is select
             cursor_item = options[current_cursor_pos]
         end
@@ -99,7 +99,7 @@ function shopping_routine_update(options)
             if current_cursor_pos > total_items then
                 current_cursor_pos = total_items + 2
             else
-                if shopping_amount_in_basket(cursor_item.id) < cursor_item.available then
+                if store_amount_in_basket(cursor_item.id) < cursor_item.available then
                     add(basket, options[current_cursor_pos])
                 end
             end
@@ -107,22 +107,22 @@ function shopping_routine_update(options)
         if total_items + 2 == current_cursor_pos and btnp(5) then
             store_close()
         end
-        shopping.cursor_pos = current_cursor_pos
+        store.cursor_pos = current_cursor_pos
         yield()
     end
 end
 
-function shopping_routine_draw(options)
+function store_routine_draw(options)
 
-    shopping.is_open = true
+    store.is_open = true
     routines_add_new(
             function()
-                shopping_routine_update(options)
+                store_routine_update(options)
             end,
             ROUTINE_UPDATE,
             'shopping_update_id'
     )
-    while shopping.is_open do
+    while store.is_open do
         --TODO:create a init table function
 
         local box_bottom_y = store_box.y + store_box.h
@@ -143,30 +143,30 @@ function shopping_routine_draw(options)
         print(store_box.title, row_pos.x + 2, store_box.y + 3, 7)
         line(row_pos.x + 2, store_box.y + 10, box_right_x - 4, store_box.y + 10, 7)
         for i, item in ipairs(options) do
-            local selected = i == shopping.cursor_pos
+            local selected = i == store.cursor_pos
             if (selected) then
-                spr(shopping.cursor_spr, row_pos.x, row_pos.y)
+                spr(store.cursor_spr, row_pos.x, row_pos.y)
             end
             print("$" .. item.cost, row_pos.x + 10, row_pos.y, get_text_color(selected)) -- 10 is 8 for sprite + 2 of margin
             print(item.name, row_pos.x + 24, row_pos.y, get_text_color(selected))
 
-            print(shopping_amount_in_basket(item.id) .. "/" .. item.available, row_pos.x + 68, row_pos.y, get_text_color())
+            print(store_amount_in_basket(item.id) .. "/" .. item.available, row_pos.x + 68, row_pos.y, get_text_color())
             row_pos.y = row_pos.y + 8
         end
-        local total = "total: $" .. _shopping_basket_total()
+        local total = "total: $" .. _store_basket_total()
         print(total, box_right_x - 6 - #total * letter_width, row_pos.y + 4, get_text_color())
         line(row_pos.x + 2, box_bottom_y - 10, box_right_x - 4, box_bottom_y - 10, get_text_color())
 
-        local cancel_is_selected = shopping.cursor_pos == (#options + 1)
+        local cancel_is_selected = store.cursor_pos == (#options + 1)
         if cancel_is_selected then -- is cancel option
-            spr(shopping.cursor_spr, row_pos.x, box_bottom_y - 7)
+            spr(store.cursor_spr, row_pos.x, box_bottom_y - 7)
         end
         print("cancel", row_pos.x + 10, box_bottom_y - 7, get_text_color(cancel_is_selected))
 
         local confirm = "confirm"
-        local confirm_selected = shopping.cursor_pos == (#options + 2)
+        local confirm_selected = store.cursor_pos == (#options + 2)
         if confirm_selected then -- is confirm option
-            spr(shopping.cursor_spr, box_right_x - 20 - #confirm * letter_width, box_bottom_y - 7)
+            spr(store.cursor_spr, box_right_x - 20 - #confirm * letter_width, box_bottom_y - 7)
         end
         print(confirm, box_right_x - 10 - #confirm * letter_width, box_bottom_y - 7, get_text_color(confirm_selected))
 
@@ -174,7 +174,7 @@ function shopping_routine_draw(options)
     end
 end
 
-function _shopping_basket_total()
+function _store_basket_total()
     local value = 0
     for i in all(basket) do
         value = value + i.cost
@@ -186,7 +186,7 @@ end
 amount_in_basket
     return the number of a current item in the basket
 ]]
-function shopping_amount_in_basket(product_id)
+function store_amount_in_basket(product_id)
     return #tbl_filter(basket, function(b)
         return product_id == b.id
     end)

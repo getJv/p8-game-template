@@ -25,13 +25,13 @@ end
 function scene_menu_update()
 
     routines_manager_update()
-    if (not shopping.is_open) then
+    if (not store.is_open) then
         player_controls_update()
     end
 
     if btn(4) then
         dialog_start("initial_chat")
-        shopping_open("store_id")
+        store_open("store_id")
     end
 
 
