@@ -16,8 +16,8 @@ function scene_menu_init()
     )
     store_create("store_id",
             [[
-                id=potion;name=potion;available=3;cost=50;sprite=15
-                id=antidote;name=antidote;available=5;cost=5;sprite=15
+                id=potion;name=potion;available=3;cost=50;spr=11
+                id=antidote;name=antidote;available=5;cost=5;spr=12
                 ]]
     )
 end

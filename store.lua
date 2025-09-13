@@ -147,8 +147,9 @@ function store_routine_draw(options)
             if (selected) then
                 spr(store.cursor_spr, row_pos.x, row_pos.y)
             end
-            print("$" .. item.cost, row_pos.x + 10, row_pos.y, get_text_color(selected)) -- 10 is 8 for sprite + 2 of margin
-            print(item.name, row_pos.x + 24, row_pos.y, get_text_color(selected))
+            spr(item.spr, row_pos.x + 9, row_pos.y-2)
+            print(item.name, row_pos.x + 19, row_pos.y, get_text_color(selected))
+            print("$" .. item.cost, row_pos.x + 55, row_pos.y, get_text_color(selected)) -- 10 is 8 for sprite + 2 of margin
 
             print(store_amount_in_basket(item.id) .. "/" .. item.available, row_pos.x + 68, row_pos.y, get_text_color())
             row_pos.y = row_pos.y + 8
