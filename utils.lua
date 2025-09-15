@@ -99,3 +99,13 @@ function tbl_from_string(str_data,single_obj)
     end
     return list
 end
+
+--[[ panic
+ - is a fatal error thal will stop the game.
+ - it helps the developer to understand with config is missing
+]]
+function panic(message)
+    cls()
+    print(message,10,10,7)
+    stop()
+end
