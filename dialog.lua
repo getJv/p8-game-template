@@ -56,7 +56,7 @@ dialog_create
 ```
 ]]
 function dialog_create(dialog_id, speeches)
-    add(dialogs.items, {
+    dialogs.items[dialog_id] = {
         id = dialog_id,
         cb_with_speeches = function()
             for i in all(tbl_from_string(speeches)) do
@@ -67,7 +67,7 @@ function dialog_create(dialog_id, speeches)
                 dialog_speech(actor,i.speech)
             end
         end
-    })
+    }
 end
 
 --[[
@@ -77,12 +77,10 @@ dialog_start
 ]]
 function dialog_start(dialog_id)
     if dialogs.current == 0 then
-        local items = tbl_filter(dialogs.items, function(i)
-            return i.id == dialog_id
-        end)
         dialogs.current = dialog_id
+        local dialog_entry = dialogs.items[dialog_id]
         routines_add_new(
-                items[1].cb_with_speeches,
+                dialog_entry.cb_with_speeches,
                 ROUTINE_DRAW,
                 dialog_id
         )
