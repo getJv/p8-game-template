@@ -4,6 +4,7 @@ dialog.lua
 - rely on routines system
 dependencies:
  - routines.lua
+ - actors.lua
 ]]
 
 -- store the group of dialogs
@@ -59,8 +60,11 @@ function dialog_create(dialog_id, speeches)
         id = dialog_id,
         cb_with_speeches = function()
             for i in all(tbl_from_string(speeches)) do
-                --TODO: after move actor to setmap uptate this to actors[i.actor_id]
-                dialog_speech({name=i.actor_id},i.speech)
+                local actor = actors[i.actor_id]
+                if not actor then
+                    panic("no actor with id " .. i.actor_id)
+                end
+                dialog_speech(actor,i.speech)
             end
         end
     })

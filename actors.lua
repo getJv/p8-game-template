@@ -48,8 +48,7 @@ function actors_add_new(actor_id,actor_name, x, y,w,h, anim,color)
         anim = anim or "", -- anim is an object
         color = color or rnd(14) +1,
     }
-    --TODO: Remove all add() and use setMap-keyvalue
-    add(actors, new_actor)
+    actors[actor_id]=new_actor
 
     if( new_actor.anim ~= "") then
         -- routine to draw the sprite sequence
@@ -58,7 +57,7 @@ function actors_add_new(actor_id,actor_name, x, y,w,h, anim,color)
                     actor_routine_anim_draw(new_actor)
                 end,
                 ROUTINE_DRAW,
-                "draw_actor_" .. actor_name
+                "draw_actor_" .. actor_id
         )
     end
     return new_actor
