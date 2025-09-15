@@ -7,31 +7,19 @@ dependencies:
 ]]
 
 -- store the group of dialogs
-dialogs = {
-    current = 0,
-    items = {}
-}
+dialogs = tbl_from_string([[ current=0;items={} ]],true)
+
 -- dialog_control function settings controls the current dialog
-dialog_control = {
-    message = "",
-    current_index = 0,
-    typing_speed = 2,
-    waiting_confirmation_to_continue = true -- trigger flag. player should press X to continue
-}
+dialog_control_initial = [[
+    message=;current_index=0;typing_speed=2;waiting_confirmation_to_continue=true;
+]]
+dialog_control = tbl_from_string(dialog_control_initial,true)
+
 -- _dialog_frame function settings. controls the dialog box layout
-dialog_frame_obj = {
-    x = 4, -- left dialog box
-    y = 113, -- top dialog box
-    w = 119, -- right dialog box
-    h = 10, -- bottom dialog box
-    box_bg_color = 5, -- grey
-    box_border_color = 3, -- dark green
-    box_txt_color = 7, -- white
-    box_p_top = 3, -- padding top
-    box_p_left = 3, -- padding left
-    tab_name_h = 8, -- how tall is the dialog box
-    tab_m_left = 4 -- margin left
-}
+dialog_frame_obj = tbl_from_string([[
+    x=4;y=113;w=119;h=10;box_bg_color=5;box_border_color=3;box_txt_color=7;box_p_top=3;box_p_left=3;tab_name_h=8;tab_m_left=4;
+]]
+,true)
 
 --[[
 dialog_create
@@ -69,7 +57,12 @@ dialog_create
 function dialog_create(dialog_id, speeches)
     add(dialogs.items, {
         id = dialog_id,
-        cb_with_speeches = _dialog_parse_from_tbl_text_to_cb(speeches)
+        cb_with_speeches = function()
+            for i in all(tbl_from_string(speeches)) do
+                --TODO: after move actor to setmap uptate this to actors[i.actor_id]
+                dialog_speech({name=i.actor_id},i.speech)
+            end
+        end
     })
 end
 
@@ -111,7 +104,8 @@ dialog_speech
 ```
 ]]
 function dialog_speech(obj, text, typing_speed)
-    _dialog_reset(obj)
+    dialog_control = tbl_from_string(dialog_control_initial,true)
+
     typing_speed = typing_speed or dialog_control.typing_speed
     local print_x_btn = true -- control the toggle animation to the button x
 
@@ -150,39 +144,6 @@ function dialog_speech(obj, text, typing_speed)
 end
 
 
-
---[[
-    internal parser from tbl text to dialog group callback
-]]
-function _dialog_parse_from_tbl_text_to_cb(dialog_string)
-    local dialog_parts = {}
-    -- break in lines
-    for line in all(split(dialog_string, '\n')) do
-        if line ~= "" then
-            -- extract the parameters
-            local parts = split(line, ';')
-            if #parts > 1 then -- check minimal number of params
-                local actor = tbl_filter(actors,function(i)
-                    return i.id == str_trim(parts[1])
-                end)
-
-                add(dialog_parts,{
-                    actor[1], --parts[1], -- actor name,
-                    parts[2], -- dialog text
-                    parts[3] or dialog_control.typing_speed
-                })
-            end
-        end
-    end
-
-    return function()
-        for i in all(dialog_parts) do
-            dialog_speech(i[1],i[2])
-        end
-    end
-
-end
-
 function _dialog_check_if_user_pressed_x_to_continue()
     if btn(5) then
         -- 5 is the btn 5
@@ -219,14 +180,4 @@ function _dialog_frame(new_txt, speaker_name)
             dialog_frame_obj.box_txt_color
     )
 
-end
---[[
-_dialog_reset
- - internal function
- - set the dialog_control to initial state
-]]
-function _dialog_reset()
-    dialog_control.current_index = 0
-    dialog_control.message = ""
-    dialog_control.waiting_confirmation_to_continue = true
 end

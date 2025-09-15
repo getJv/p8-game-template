@@ -1,3 +1,6 @@
+
+
+
 function scene_menu_init()
     _update = scene_menu_update
     _draw = scene_menu_draw
@@ -9,9 +12,9 @@ function scene_menu_init()
     dialog_create(
             "initial_chat",
             [[
-                enemy_1;hello there
-                player;hey hey!
-                player;what can i do for you?
+                actor_id=enemy_1;speech=hello there
+                actor_id=player;speech=hey hey!
+                actor_id=player;speech=what can i do for you?
             ]]
     )
     store_create("store_id",

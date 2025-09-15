@@ -82,6 +82,10 @@ function tbl_from_string(str_data,single_obj)
                         value = true
                     elseif value == "false" then
                         value = false
+                    elseif value == "{}" then
+                        value = {}
+                    elseif value == '""' then
+                        value=""
                     end
 
                     obj[parties[1]] = value

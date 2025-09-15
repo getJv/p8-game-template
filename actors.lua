@@ -48,6 +48,7 @@ function actors_add_new(actor_id,actor_name, x, y,w,h, anim,color)
         anim = anim or "", -- anim is an object
         color = color or rnd(14) +1,
     }
+    --TODO: Remove all add() and use setMap-keyvalue
     add(actors, new_actor)
 
     if( new_actor.anim ~= "") then
