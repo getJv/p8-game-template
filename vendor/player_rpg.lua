@@ -80,9 +80,6 @@ function player_controls_update()
 
 end
 
-
-
-
 function _actor_update_anim(actor, anim_key)
     if (actor.anim.curr_anim ~= anim_key) then
         actor.anim.curr_anim = anim_key

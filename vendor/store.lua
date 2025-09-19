@@ -155,7 +155,7 @@ function store_routine_draw(options)
             row_pos.y = row_pos.y + 8
         end
         local total = "total: $" .. _store_basket_total()
-        print(total, box_right_x - 6 - #total * letter_width, row_pos.y + 4, get_text_color())
+        print(total, box_right_x - 6 - #total * CONST.letter_width, row_pos.y + 4, get_text_color())
         line(row_pos.x + 2, box_bottom_y - 10, box_right_x - 4, box_bottom_y - 10, get_text_color())
 
         local cancel_is_selected = store.cursor_pos == (#options + 1)
@@ -167,9 +167,9 @@ function store_routine_draw(options)
         local confirm = "confirm"
         local confirm_selected = store.cursor_pos == (#options + 2)
         if confirm_selected then -- is confirm option
-            spr(store.cursor_spr, box_right_x - 20 - #confirm * letter_width, box_bottom_y - 7)
+            spr(store.cursor_spr, box_right_x - 20 - #confirm * CONST.letter_width, box_bottom_y - 7)
         end
-        print(confirm, box_right_x - 10 - #confirm * letter_width, box_bottom_y - 7, get_text_color(confirm_selected))
+        print(confirm, box_right_x - 10 - #confirm * CONST.letter_width, box_bottom_y - 7, get_text_color(confirm_selected))
 
         yield()
     end

@@ -128,7 +128,7 @@ function dialog_speech(obj, text, typing_speed)
                 _dialog_frame(dialog_control.message, obj.name)
                 print(
                         "❎",
-                        #dialog_control.message * letter_width + 8, -- 2 is the text margin right
+                        #dialog_control.message * CONST.letter_width + 8, -- 2 is the text margin right
                         dialog_frame_obj.y + dialog_frame_obj.box_p_top
                 )
                 _dialog_check_if_user_pressed_x_to_continue()
@@ -171,7 +171,7 @@ function _dialog_frame(new_txt, speaker_name)
     rectfill(
             name_tab.x,
             name_tab.y,
-            name_tab.x + (#speaker_name * letter_width) + 4, -- 4 is the padding x
+            name_tab.x + (#speaker_name * CONST.letter_width) + 4, -- 4 is the padding x
             name_tab.y + dialog_frame_obj.tab_name_h,
             dialog_frame_obj.box_border_color
     )

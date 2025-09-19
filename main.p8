@@ -2,28 +2,20 @@ pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
 
-#include debug.lua
-#include utils.lua
-#include actors.lua
-#include dialog.lua
-#include store.lua
-#include player_rpg.lua
-#include routines.lua
-#include scene_menu.lua
-#include pre_loader.lua
+--[[ pico-cli helper files. Remove those your do not need to save tokens. ]]
+#include ./vendor/utils.lua
+#include ./vendor/debug.lua
+#include ./vendor/consts.lua
+#include ./vendor/actors.lua
+#include ./vendor/dialog.lua
+#include ./vendor/store.lua
+#include ./vendor/player_rpg.lua
+#include ./vendor/routines.lua
 
 
-
-
-
-
-
-
-
-
-
-
-
+--[[ import your files here ]]
+#include ./src/scene_menu.lua
+#include ./src/pre_loader.lua
 
 __gfx__
 00000000022222200000000002222220022222200222222002222220022222200222222002222220022222200005500000055000000550000000000000000000
