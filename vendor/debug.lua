@@ -1,3 +1,8 @@
+--[[
+    File: debug.lua
+    Token usage: 92
+    Debug helpers for drawing guides and printing quick values.
+]]
 
 -- draw border and middle lines in the screen
 function debug_draw_rules()

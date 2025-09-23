@@ -1,13 +1,20 @@
+--[[
+    File: player_rpg.lua
+    Token usage: 126
+    Player actor setup and input handling for movement and animation updates.
+]]
+
 player = {}
 
 --[[
-player_init
- - keep the player code in a same file
- - player is an actor
- - the anim tbl must be updated with proper spr numbers
+    player_init
+    - Initialize the player actor with default animation map and size
 
-deps
- - actors_add_new::actors.lua
+Sample of usage:
+
+```lua
+player_init()
+```
 ]]
 function player_init()
     player = actors_add_new(

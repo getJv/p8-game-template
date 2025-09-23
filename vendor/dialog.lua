@@ -1,10 +1,8 @@
 --[[
-dialog.lua
-- contains the dialog register logic
-- rely on routines system
-dependencies:
- - routines.lua
- - actors.lua
+    File: dialog.lua
+    Token usage: 296
+    Dialog system: register dialog groups, enqueue and render typewriter dialogs with a name tab.
+    Relies on the routines system and actors registry.
 ]]
 
 -- store the group of dialogs

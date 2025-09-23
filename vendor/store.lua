@@ -1,3 +1,10 @@
+--[[
+    File: store.lua
+    Token usage: 318
+    Simple in-game store UI and logic: open/close, navigation, basket handling, drawing and update
+    routines. Uses a string-to-table parser for configuration.
+]]
+
 store_initial_values = [[
             is_open=false;cursor_spr=16;cursor_pos=1
         ]]
@@ -12,6 +19,15 @@ store_box = tbl_from_string([[
 
 --[[ store_create
  - Register the store in a list of stores and prepare the routine callback
+
+Sample of usage:
+
+```lua
+store_create("potion_shop", [[
+    id=potion;name=potion;available=3;cost=50;spr=15
+    id=antidote;name=antidote;available=5;cost=5;spr=15
+    ]\])
+```
 ]]
 function store_create(store_id, tbl_string_options)
     stores[store_id] = function()

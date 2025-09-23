@@ -11,6 +11,16 @@ The resources here gather and encapsulate references from the [PICO-8 CheatSheet
 - There is no intention to infringe copyrights or trademarks. All names, brands, and materials mentioned belong to their respective owners.
 - If you are a rights holder and identify any issues, please open an issue so I can promptly adjust/remove the content.
 
+## Token usage:
+
+These scripts area helpful but them will cost you tokens.
+**Total tokens used (vendor folder): 1429**
+
+Remember two things:
+1. This is a usage estimative
+2. You don't need all then vendor scripts in your project, delete them.
+
+
 ## AI Usage
 
 The use of AI tools in this project is limited to:
@@ -24,6 +34,7 @@ The use of AI tools in this project is limited to:
 
 1. Helper routines and `tbl_from_str` inspired by [Kevin's video][kevin-video].
 2. Various ideas and inspirations from the [Nerdy Teachers website][nerdy-website].
+3. Token counting/optimization inspired by [a forum post][saving-tokens]
 
 ## License
 
@@ -32,3 +43,4 @@ This project is licensed under the terms of the MIT license. See the [LICENSE](L
 [cheatsheet]: https://www.lexaloffle.com/bbs/files/16585/PICO-8_CheatSheet_0111Gm_4k.png
 [kevin-video]: https://www.youtube.com/watch?v=tfGmjB72t0o&t
 [nerdy-website]: https://nerdyteachers.com/
+[saving-tokens]:https://pico-8.fandom.com/wiki/Tokens

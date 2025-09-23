@@ -1,17 +1,23 @@
-
+--[[
+    File: utils.lua
+    Token usage: 249
+    Utility helpers used across the project: table filtering, edge collision checks, string trimming,
+    simple key=value multiline string parsing, and a fatal panic helper.
+]]
 
 --[[
-a filter function the return a new tbl with the found items
-or empty tbl when noting is found
+    tbl_filter
+    - Return a new table with items that match the provided predicate
 
-example:
-```
+Sample of usage:
+
+```lua
 local result_search = tbl_filter(
-            routines,
-            function(r)
-                return r.uniq_id == uniq_id
-            end
-    )
+    routines,
+    function(r)
+        return r.uniq_id == uniq_id
+    end
+)
 ```
 ]]
 function tbl_filter(tbl,filter_func)
@@ -24,6 +30,19 @@ function tbl_filter(tbl,filter_func)
     return filtered
 end
 
+--[[
+    edges_collision
+    - Check if an object would collide with the 0..127 screen bounds
+    - Returns true if any edge would be exceeded
+
+Sample of usage:
+
+```lua
+if not edges_collision(nx,ny,player.w,player.h) then
+    player.x=nx player.y=ny
+end
+```
+]]
 function edges_collision(new_x,new_y,obj_w,obj_h)
     if new_x + obj_w > 127
             or new_x < 0
@@ -35,6 +54,16 @@ function edges_collision(new_x,new_y,obj_w,obj_h)
     return false
 end
 
+--[[
+    str_trim
+    - Remove leading and trailing spaces and tabs from a string
+
+Sample of usage:
+
+```lua
+local clean = str_trim("  hello\t") -- "hello"
+```
+]]
 function str_trim(s)
     -- Remove leading whitespace
     local start = 1
@@ -66,6 +95,18 @@ end
 ```
 
 
+]]
+--[[
+    tbl_from_string
+    - Parse a multiline string with key=value;key=value entries into a table (array of objects)
+    - If single_obj is true, returns the first object directly
+
+Sample of usage:
+
+```lua
+local tt = tbl_from_string("is_open=false;cursor_spr=16;cursor_pos=1", true)
+-- result: { is_open=false, cursor_spr=16, cursor_pos=1 }
+```
 ]]
 function tbl_from_string(str_data,single_obj)
     local list = {}

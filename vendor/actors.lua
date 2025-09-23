@@ -1,3 +1,9 @@
+--[[
+    File: actors.lua
+    Token usage: 188
+    Actor registry and animation drawing helpers. Adds and animates actors on screen.
+]]
+
 actors = {}
 
 --[[
@@ -7,11 +13,11 @@ actors_add_new
  - if a anim map is not given a square numbered square is drew
  - returns the actor reference
 
-deps:
+ deps:
  - routines.lua
-
-usage example:
-
+ 
+ usage example:
+ 
 ```
 actors_add_new(
    "player_1",
