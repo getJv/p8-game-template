@@ -27,10 +27,10 @@ end
     clean the screen and print a string value then stop the game
 ]]
 function debug_dd(value,should_stop,x,y)
-    cls()
+
     x = x or 5
     y = x or 5
-    should_stop = should_stop or true
+
     print("debug:",2,0,7)
     if type(value) == "table" then
         local currentY = y + 5
@@ -42,7 +42,7 @@ function debug_dd(value,should_stop,x,y)
     else
         print(value, x, y + 5, 7)
     end
-    if(should_stop) then
+    if  should_stop then
         stop()
     end
 end
