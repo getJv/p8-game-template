@@ -42,7 +42,7 @@ function store_close(confirmed)
         print("check out not implemented")
     end
     basket = {}
-    store = tbl_from_string(store_initial_values,true)
+    store.is_open = false
 end
 
 function store_open(store_id)
@@ -130,6 +130,7 @@ end
 
 function store_routine_draw(options)
 
+    store.cursor_pos = 1
     store.is_open = true
     routines_add_new(
             function()
@@ -139,7 +140,7 @@ function store_routine_draw(options)
             'shopping_update_id'
     )
     while store.is_open do
-        --TODO:create a init table function
+
 
         local box_bottom_y = store_box.y + store_box.h
         local box_right_x = store_box.x + store_box.w
