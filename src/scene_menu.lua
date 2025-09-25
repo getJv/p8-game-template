@@ -1,28 +1,26 @@
-
-
-
 function scene_menu_init()
     _update = scene_menu_update
     _draw = scene_menu_draw
+    load_dialogs()
+    load_stores()
 
     --init actors
-    actors_add_new("enemy_1", "bob")
+    actors_add_new("store_man", "bob",
+            96,
+            5,
+            16,
+            16,
+            {
+                curr_anim = "idle",
+                curr_anim_frames = 16,
+                curr_spr_index = 1,
+                spr_w = 2,
+                spr_h = 2,
+                idle = { 32, 34 },
+            })
     player_init()
 
-    dialog_create(
-            "initial_chat",
-            [[
-                actor_id=enemy_1;speech=hello there
-                actor_id=player;speech=hey hey!
-                actor_id=player;speech=what can i do for you?
-            ]]
-    )
-    store_create("store_id",
-            [[
-                id=potion;name=potion;available=3;cost=50;spr=11
-                id=antidote;name=antidote;available=5;cost=5;spr=12
-                ]]
-    )
+
 end
 
 function scene_menu_update()
@@ -42,8 +40,8 @@ end
 
 function scene_menu_draw()
     cls()
+    map(0, 0)
     routines_manager_draw()
-    debug_draw_rules()
 end
 
 
