@@ -12,6 +12,7 @@ actors_add_new
  - add the actor in the actors maps
  - if a anim map is not given a square numbered square is drew
  - returns the actor reference
+ - in_collision is a key_value tbl that hold the actor_id in collision (in_collision["store_man"] = true)
 
  deps:
  - routines.lua
@@ -38,7 +39,8 @@ actors_add_new(
       down = {7,8},
       left = {9,10}
     },
-    13
+    13,
+    in_collision = {}
  )
 ```
 
@@ -53,6 +55,7 @@ function actors_add_new(actor_id,actor_name, x, y,w,h, anim,color)
         h = h or 8,
         anim = anim or "", -- anim is an object
         color = color or rnd(14) +1,
+        in_collision = {}
     }
     actors[actor_id]=new_actor
 

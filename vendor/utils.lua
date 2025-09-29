@@ -150,3 +150,12 @@ function panic(message)
     print(message,10,10,7)
     stop()
 end
+
+
+function actors_collision(actor_1,actor_2,offset)
+    offset = offset or 0
+    return actor_1.x - offset < actor_2.x+actor_2.w and
+            actor_1.x+actor_1.w +offset > actor_2.x and
+            actor_1.y - offset < actor_2.y+actor_2.h and
+            actor_1.y+actor_1.h + offset > actor_2.y
+end
