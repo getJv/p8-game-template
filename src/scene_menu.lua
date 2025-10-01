@@ -30,14 +30,6 @@ function scene_menu_update()
         player_controls_update()
     end
 
-    -- check store collision
-    if actors_collision(player,actors["store_man"],1) then
-        player.in_collision["store_man"] = true
-    else
-        player.in_collision["store_man"] = false
-    end
-
-
     if player.in_collision["store_man"] then
         if btn(4) then
             store_open("store_man")

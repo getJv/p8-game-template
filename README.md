@@ -14,7 +14,7 @@ The resources here gather and encapsulate references from the [PICO-8 CheatSheet
 ## Token usage:
 
 These scripts area helpful but them will cost you tokens.
-**Total tokens used (vendor folder): 1429**
+**Total tokens used (vendor folder): 1469**
 
 Remember two things:
 1. This is a usage estimative

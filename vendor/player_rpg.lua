@@ -1,6 +1,6 @@
 --[[
     File: player_rpg.lua
-    Token usage: 126
+    Token usage: 166
     Player actor setup and input handling for movement and animation updates.
 ]]
 
@@ -43,47 +43,50 @@ player_controls_update
 ]]
 function player_controls_update()
 
-    local new_x = player.x
-    local new_y = player.y
+    -- compute intended delta using direction components
+    local dx = 0
+    local dy = 0
+    if btn(1) then dx = 1 end -- right
+    if btn(0) then dx = -1 end -- left overrides right
+    if btn(3) then dy = 1 end -- down
+    if btn(2) then dy = -1 end -- up overrides down
 
-    if btn(1) and btn(3) then -- right down
-        new_x += 1
-        new_y += 1
+    -- choose animation by priority: horizontal, then vertical, else idle
+    if dx > 0 then
         _actor_update_anim(player, "right")
-    elseif btn(0) and btn(3) then -- left down
-        new_x -= 1
-        new_y += 1
+    elseif dx < 0 then
         _actor_update_anim(player, "left")
-    elseif btn(1) and btn(2) then -- right up
-        new_x += 1
-        new_y -= 1
-        _actor_update_anim(player, "right")
-    elseif btn(0) and btn(2) then -- left up
-        new_x -= 1
-        new_y -= 1
-        _actor_update_anim(player, "left")
-    elseif btn(0) then -- left
-        new_x -= 1
-        _actor_update_anim(player, "left")
-    elseif btn(1) then -- right
-        new_x += 1
-        _actor_update_anim(player, "right")
-    elseif btn(2) then -- up
-        new_y -= 1
+    elseif dy < 0 then
         _actor_update_anim(player, "up")
-    elseif btn(3) then -- down
-        new_y += 1
+    elseif dy > 0 then
         _actor_update_anim(player, "down")
-    elseif btn() == 0 then
+    else
         _actor_update_anim(player, "idle")
     end
 
-    if edges_collision(new_x,new_y,player.w,player.h) then
-       return
+    if dx == 0 and dy == 0 then
+        return
     end
 
-    player.x = new_x
-    player.y = new_y
+    new_actor_coords = {
+        x = player.x + dx,
+        y = player.y + dy,
+        w = player.w,
+        h = player.h
+    }
+
+    if edges_collision(new_actor_coords) then
+        return
+    end
+    -- check store collision
+    player.in_collision["store_man"] = actors_collision(new_actor_coords,actors["store_man"])
+    if player.in_collision["store_man"] then
+        return
+    end
+
+    player.x = new_actor_coords.x
+    player.y = new_actor_coords.y
+
 
 end
 

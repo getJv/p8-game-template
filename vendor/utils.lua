@@ -38,16 +38,16 @@ end
 Sample of usage:
 
 ```lua
-if not edges_collision(nx,ny,player.w,player.h) then
-    player.x=nx player.y=ny
+if not edges_collision({x=10,y=10,w=10,h=10,}) then
+    do something...
 end
 ```
 ]]
-function edges_collision(new_x,new_y,obj_w,obj_h)
-    if new_x + obj_w > 127
-            or new_x < 0
-            or new_y < 0
-            or new_y + obj_h > 127
+function edges_collision(actor_obj)
+    if actor_obj.x + actor_obj.w > 127
+            or actor_obj.x < 0
+            or actor_obj.y < 0
+            or actor_obj.y + actor_obj.h > 127
     then
         return true
     end
@@ -152,10 +152,9 @@ function panic(message)
 end
 
 
-function actors_collision(actor_1,actor_2,offset)
-    offset = offset or 0
-    return actor_1.x - offset < actor_2.x+actor_2.w and
-            actor_1.x+actor_1.w +offset > actor_2.x and
-            actor_1.y - offset < actor_2.y+actor_2.h and
-            actor_1.y+actor_1.h + offset > actor_2.y
+function actors_collision(actor_1,actor_2)
+     return actor_1.x  < actor_2.x+actor_2.w and
+            actor_1.x+actor_1.w  > actor_2.x and
+            actor_1.y  < actor_2.y+actor_2.h and
+            actor_1.y+actor_1.h  > actor_2.y
 end
