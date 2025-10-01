@@ -78,11 +78,18 @@ function player_controls_update()
     if edges_collision(new_actor_coords) then
         return
     end
-    -- check store collision
+
     player.in_collision["store_man"] = actors_collision(new_actor_coords,actors["store_man"])
     if player.in_collision["store_man"] then
         return
     end
+
+    player.in_collision["lake_border"] = map_collision(new_actor_coords,0)
+    if player.in_collision["lake_border"] then
+        return
+    end
+
+
 
     player.x = new_actor_coords.x
     player.y = new_actor_coords.y

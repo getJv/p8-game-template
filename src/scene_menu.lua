@@ -45,7 +45,7 @@ function scene_menu_draw()
     cls()
     map(0, 0)
     routines_manager_draw()
-    debug_dd(player.in_collision["store_man"])
+
 end
 
 

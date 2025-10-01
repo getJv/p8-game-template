@@ -158,3 +158,7 @@ function actors_collision(actor_1,actor_2)
             actor_1.y  < actor_2.y+actor_2.h and
             actor_1.y+actor_1.h  > actor_2.y
 end
+
+function map_collision( actor_obj, flag )
+    return fget( mget((actor_obj.x +1)/CONST.cell_size,actor_obj.y/CONST.cell_size), flag )
+end
