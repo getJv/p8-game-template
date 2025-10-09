@@ -45,7 +45,7 @@ actors_add_new(
 ```
 
 ]]
-function actors_add_new(actor_id,actor_name, x, y,w,h, anim,color)
+function actors_add_new(actor_id,actor_name, x, y,w,h, anim,color,in_scene)
     local new_actor = {
         id = actor_id,
         name = actor_name or "",
@@ -55,7 +55,8 @@ function actors_add_new(actor_id,actor_name, x, y,w,h, anim,color)
         h = h or 8,
         anim = anim or "", -- anim is an object
         color = color or rnd(14) +1,
-        in_collision = {}
+        in_collision = {},
+        in_scene = in_scene or true
     }
     actors[actor_id]=new_actor
 
@@ -119,6 +120,24 @@ function _actor_drawing(actor)
             )
         end
 end
+
+--[[
+actor_in_scene_routine
+ - a wrapper to add a actor routine to run while actor.in_scene is true
+]]
+function actor_in_scene_routine(callback_func,routine_type,routine_id)
+    routines_add_new(
+            function()
+                while player.in_scene do
+                    callback_func()
+                    yield()
+                end
+            end,
+            routine_type,
+            routine_id
+    )
+end
+
 
 
 

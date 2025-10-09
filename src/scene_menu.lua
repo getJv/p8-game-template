@@ -24,28 +24,13 @@ function scene_menu_init()
 end
 
 function scene_menu_update()
-
     routines_manager_update()
-    if (not store.is_open) then
-        player_controls_update()
-    end
-
-    if player.in_collision["store_man"] then
-        if btn(4) then
-            store_open("store_man")
-        end
-    elseif btn(4) then
-        dialog_start("initial_chat")
-    end
-
-
 end
 
 function scene_menu_draw()
     cls()
     map(0, 0)
     routines_manager_draw()
-
 end
 
 

@@ -36,6 +36,40 @@ function player_init()
                 down = { 7, 8 },
                 left = { 9, 10 }
             })
+
+
+    actor_in_scene_routine(
+            function()
+                if player.in_collision["store_man"] then
+                    if btn(4) then
+                        store_open("store_man")
+                    end
+                end
+            end,
+            ROUTINE_UPDATE,
+            "player_store_man_collision"
+    )
+
+
+    actor_in_scene_routine(
+            function()
+                if btn(4) then
+                    dialog_start("initial_chat")
+                end
+            end,
+            ROUTINE_UPDATE,
+            "player_init_chat"
+    )
+
+    actor_in_scene_routine(
+            function()
+                if (not store.is_open) then
+                    player_controls_update()
+                end
+            end,
+            ROUTINE_UPDATE,
+            "player_control"
+    )
 end
 --[[
 player_controls_update
