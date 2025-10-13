@@ -5,19 +5,14 @@ function scene_menu_init()
     load_stores()
 
     --init actors
-    actors_add_new("store_man", "bob",
-            96,
-            5,
-            16,
-            16,
-            {
-                curr_anim = "idle",
-                curr_anim_frames = 16,
-                curr_spr_index = 1,
-                spr_w = 2,
-                spr_h = 2,
-                idle = { 32, 34 },
-            })
+
+
+
+    actors_add_new(
+            tbl_from_string([[id=store_man;name=bob]],true),
+            tbl_from_string([[x=96;y=5;w=16;h=16]],true),
+            tbl_from_string([[curr_anim=idle;curr_anim_frames=16;curr_spr_index=1;spr_w=2;spr_h=2;idle={32,34};]],true)
+    )
     player_init()
 
 

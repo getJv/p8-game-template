@@ -3,9 +3,9 @@ version 42
 __lua__
 
 --[[ pico-cli helper files. Remove those your do not need to save tokens. ]]
+#include ./vendor/debug.lua
 #include ./vendor/utils.lua
 #include ./vendor/consts.lua
-#include ./vendor/debug.lua
 #include ./vendor/actors.lua
 #include ./vendor/dialog.lua
 #include ./vendor/store.lua

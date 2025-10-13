@@ -50,14 +50,16 @@ routines_manager_draw()
 ```
 ]]
 function routines_manager_draw()
-    _routines_iterate(
-            tbl_filter(
-                    routines,
-                    function(r)
-                        return r.type == ROUTINE_DRAW
-                    end
-            )
+
+    local rr =  tbl_filter(
+            routines,
+            function(r)
+                return r.type == ROUTINE_DRAW
+            end
     )
+
+
+    _routines_iterate(rr)
 end
 
 -- consume the routines in the given list

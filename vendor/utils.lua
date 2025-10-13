@@ -81,6 +81,22 @@ function str_trim(s)
 end
 
 
+--[[ tbl_from_str_tbl
+Useful to create real tables from string tables;
+
+Example:
+```lua
+local string_tbl = "{1,2}"
+tbl_from_str_tbl(string_tbl,","),true) -- returns: {1,2}
+```
+]]
+function tbl_from_str_tbl(text_value,separator)
+    if type(text_value) == "number" then
+        return {}
+    end
+    return split(sub(text_value,2,#text_value-1),separator)
+end
+
 --[[
  - convert a multline string in a arraylist of objects
  - if you just have one-line remember to use the key access myResult[1]
@@ -127,6 +143,8 @@ function tbl_from_string(str_data,single_obj)
                         value = {}
                     elseif value == '""' then
                         value=""
+                    elseif #tbl_from_str_tbl(value,",") > 1 then
+                        value = tbl_from_str_tbl(value,",")
                     end
 
                     obj[parties[1]] = value

@@ -20,14 +20,19 @@ actors_add_new
  usage example:
  
 ```
-actors_add_new(
-   "player_1",
-   "ana",
-   10,
-   10,
-   8,
-   8,
-   {
+attrs = {
+    id = "player_1",
+    name = "ana",
+    color = 13,
+    in_scene = true
+}
+coords = {
+    x = 10,
+    y = 10,
+    w = 8,
+    h = 10,
+}
+animations = {
       curr_anim = "idle",
       curr_anim_frames = 12,
       curr_spr_index = 0,
@@ -38,25 +43,32 @@ actors_add_new(
       right = {5,6},
       down = {7,8},
       left = {9,10}
-    },
-    13,
-    in_collision = {}
+}
+in_collision = {}
+actors_add_new(
+   attrs,
+   coords,
+   animations,
+   in_collision
  )
 ```
 
 ]]
-function actors_add_new(actor_id,actor_name, x, y,w,h, anim,color,in_scene)
+function actors_add_new(attrs,coords,animations)
+
+    local actor_id = attrs.id
+
     local new_actor = {
         id = actor_id,
-        name = actor_name or "",
-        x = x or rnd(120) + 5,
-        y = y or rnd(120) + 5,
-        w = w or 8,
-        h = h or 8,
-        anim = anim or "", -- anim is an object
-        color = color or rnd(14) +1,
-        in_collision = {},
-        in_scene = in_scene or true
+        color = attrs.color or rnd(14) +1,
+        name = attrs.name or "",
+        in_scene = attrs.in_scene or true,
+        x = coords.x or rnd(120) + 5,
+        y = coords.y or rnd(120) + 5,
+        w = coords.w or 8,
+        h = coords.h or 8,
+        anim = animations or "", -- anim is an object
+        in_collision = attrs.in_collision or {},
     }
     actors[actor_id]=new_actor
 

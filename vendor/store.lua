@@ -75,7 +75,6 @@ routines_add_new(
 
 ]]
 function store_routine_update(options)
-
     local total_items = #options
     local current_cursor_pos = store.cursor_pos
     local cursor_item = 1
