@@ -14,7 +14,7 @@ The resources here gather and encapsulate references from the [PICO-8 CheatSheet
 ## Token usage:
 
 These scripts area helpful but them will cost you tokens.
-**Total tokens used (vendor folder): 1469**
+**Total tokens used (vendor folder): 1477**
 
 Remember two things:
 1. This is a usage estimative
@@ -35,6 +35,36 @@ The use of AI tools in this project is limited to:
 1. Helper routines and `tbl_from_str` inspired by [Kevin's video][kevin-video].
 2. Various ideas and inspirations from the [Nerdy Teachers website][nerdy-website].
 3. Token counting/optimization inspired by [a forum post][saving-tokens]
+
+## Development
+
+### Dependencies
+
+Setting lua maybe  not be easy... these are the steps i used:
+
+1. sudo apt update
+2. sudo apt install lua5.1 luarocks
+3. sudo luarocks --lua-version=5.1 install busted
+4. sudo luarocks --lua-version=5.1 install luacov
+5. sudo luarocks --lua-version=5.1 install luacov-console
+
+and now to run tests use: 
+```bash
+busted tests -c && luacov-console && luacov-console -s
+```
+
+#### troubleshotting:
+
+**busted not installing**
+in the step 5 busted was refusing to install. So I created a symlink:    `sudo ln -sf /usr/bin/luarocks /usr/local/bin/luarocks` it solved.
+
+**busted not running dua mismatch lua version** 
+after installing I tried the `busted tests` and got this error: 
+`/home/<my-user>/.luarocks/bin/busted: 3: exec: /usr/bin/lua5.4: not found` 
+for some reason busted is waiting for 5.4 and no 5.1
+so I edit the `nano /home/jhonatan/.luarocks/bin/busted`
+and update the `LUAROCKS_SYSCONFDIR` from this: `/usr/bin/lua5.4` to this: `/usr/bin/lua`   
+
 
 ## License
 

@@ -1,6 +1,6 @@
 --[[
     File: utils.lua
-    Token usage: 249
+    Token usage: 257
     Utility helpers used across the project: table filtering, edge collision checks, string trimming,
     simple key=value multiline string parsing, and a fatal panic helper.
 ]]
@@ -101,28 +101,6 @@ end
  - convert a multline string in a arraylist of objects
  - if you just have one-line remember to use the key access myResult[1]
  0 is single_obj is true it return a obj interad of a list
-
- ```
- example:
- local tt = tbl_from_string([[
-            is_open=false;cursor_spr=16;cursor_pos=1
-        ]\])[1]
- -- tt is now a object in a tbl: {{is_open=false,...}}
-```
-
-
-]]
---[[
-    tbl_from_string
-    - Parse a multiline string with key=value;key=value entries into a table (array of objects)
-    - If single_obj is true, returns the first object directly
-
-Sample of usage:
-
-```lua
-local tt = tbl_from_string("is_open=false;cursor_spr=16;cursor_pos=1", true)
--- result: { is_open=false, cursor_spr=16, cursor_pos=1 }
-```
 ]]
 function tbl_from_string(str_data,single_obj)
     local list = {}
@@ -134,6 +112,9 @@ function tbl_from_string(str_data,single_obj)
                 local parties = split(entry, '=')
                 local value = parties[2]
                 if #parties > 1 then
+                    -- trim key and value to ignore incidental spaces
+                    local key = str_trim(parties[1])
+                    value = str_trim(value)
                     -- Convert value to the appropriate type
                     if value == "true" then
                         value = true
@@ -147,7 +128,7 @@ function tbl_from_string(str_data,single_obj)
                         value = tbl_from_str_tbl(value,",")
                     end
 
-                    obj[parties[1]] = value
+                    obj[key] = value
                 end
             end
             add(list,obj)
