@@ -33,7 +33,7 @@ dialog_create
    local player = add_new_enemy("player","ana banana")
     dialog_create(
             "initial_chat",
-            [[
+            [/[
                 enemy_1;hello there
                 player;hey hey!;5
                 player;what can i do for you?

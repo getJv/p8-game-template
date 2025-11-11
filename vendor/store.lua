@@ -20,14 +20,6 @@ store_box = tbl_from_string([[
 --[[ store_create
  - Register the store in a list of stores and prepare the routine callback
 
-Sample of usage:
-
-```lua
-store_create("potion_shop", [[
-    id=potion;name=potion;available=3;cost=50;spr=15
-    id=antidote;name=antidote;available=5;cost=5;spr=15
-    ]\])
-```
 ]]
 function store_create(store_id, tbl_string_options)
     stores[store_id] = function()
@@ -56,23 +48,6 @@ end
 --[[
 shopping_routine_update
     open the store with the given option
-example:
-```
-routines_add_new(
-            function()
-                shopping_routine_draw(
-                        [[
-                        id=potion;name=potion;available=3;cost=50;sprite=15
-                        id=antidote;name=antidote;available=5;cost=5;sprite=15
-                        ]\]
-                )
-                end,
-                ROUTINE_DRAW,
-                'shopping_id'
-)
-
-```
-
 ]]
 function store_routine_update(options)
     local total_items = #options
