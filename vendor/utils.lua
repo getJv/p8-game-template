@@ -71,6 +71,7 @@ function str_trim(s)
         start = start + 1
     end
 
+
     -- Remove trailing whitespace
     local finish = #s
     while finish >= start and (sub(s, finish, finish) == " " or sub(s, finish, finish) == "\t") do
@@ -112,9 +113,6 @@ function tbl_from_string(str_data,single_obj)
                 local parties = split(entry, '=')
                 local value = parties[2]
                 if #parties > 1 then
-                    -- trim key and value to ignore incidental spaces
-                    local key = str_trim(parties[1])
-                    value = str_trim(value)
                     -- Convert value to the appropriate type
                     if value == "true" then
                         value = true
@@ -128,7 +126,7 @@ function tbl_from_string(str_data,single_obj)
                         value = tbl_from_str_tbl(value,",")
                     end
 
-                    obj[key] = value
+                    obj[parties[1]] = value
                 end
             end
             add(list,obj)
