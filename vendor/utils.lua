@@ -1,3 +1,6 @@
+utils = {}
+
+
 --[[
     File: utils.lua
     Token usage: 257
@@ -20,7 +23,7 @@ local result_search = tbl_filter(
 )
 ```
 ]]
-function tbl_filter(tbl,filter_func)
+function utils.tbl_filter(tbl,filter_func)
     local filtered = {}
     for r in all(tbl) do
         if(filter_func(r)) then
@@ -159,3 +162,8 @@ end
 function map_collision( actor_obj, flag )
     return fget( mget((actor_obj.x +1)/CONST.cell_size,actor_obj.y/CONST.cell_size), flag )
 end
+
+--[[
+if package then
+    return utils
+end]]

@@ -179,7 +179,7 @@ amount_in_basket
     return the number of a current item in the basket
 ]]
 function store_amount_in_basket(product_id)
-    return #tbl_filter(basket, function(b)
+    return #utils.tbl_filter(basket, function(b)
         return product_id == b.id
     end)
 end

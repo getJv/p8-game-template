@@ -53,6 +53,13 @@ and now to run tests use:
 busted tests -c && luacov-console && luacov-console -s
 ```
 
+or for a single file:
+
+```bash
+busted --verbose tests/utils_spec.lua
+```
+
+
 #### troubleshotting:
 
 **busted not installing**

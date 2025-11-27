@@ -27,7 +27,7 @@ routines_manager_update()
 ]]
 function routines_manager_update()
     _routines_iterate(
-            tbl_filter(
+            utils.tbl_filter(
                     routines,
                     function(r)
                         return r.type ~= ROUTINE_DRAW
@@ -51,7 +51,7 @@ routines_manager_draw()
 ]]
 function routines_manager_draw()
 
-    local rr =  tbl_filter(
+    local rr =  utils.tbl_filter(
             routines,
             function(r)
                 return r.type == ROUTINE_DRAW
@@ -132,7 +132,7 @@ function routines_add_new(new_func, type,uniq_id)
         routine = cocreate(new_func)
     }
 
-    local result_search = tbl_filter(routines,
+    local result_search = utils.tbl_filter(routines,
             function(r)
                 return r.uniq_id == uniq_id
             end
