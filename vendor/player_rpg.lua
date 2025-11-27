@@ -96,7 +96,7 @@ function player_controls_update()
         h = player.h
     }
 
-    if edges_collision(new_actor_coords) then
+    if utils.edges_collision(new_actor_coords) then
         return
     end
 

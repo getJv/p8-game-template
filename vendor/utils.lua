@@ -1,28 +1,36 @@
 utils = {}
 
 
---[[
-    File: utils.lua
-    Token usage: 257
-    Utility helpers used across the project: table filtering, edge collision checks, string trimming,
-    simple key=value multiline string parsing, and a fatal panic helper.
-]]
-
---[[
-    tbl_filter
-    - Return a new table with items that match the provided predicate
-
-Sample of usage:
-
-```lua
-local result_search = tbl_filter(
-    routines,
-    function(r)
-        return r.uniq_id == uniq_id
-    end
-)
-```
-]]
+--- Filters elements of a table based on a predicate function.
+--
+-- This function iterates through all elements of the given table and returns
+-- a new table containing only the elements for which the filter function
+-- returns true.
+--
+-- This implementation uses PICO-8 style iteration (`all`) and insertion (`add`).
+-- Make sure these functions are available or mocked when running outside PICO-8.
+--
+-- @param tbl table
+--        The table to be filtered. Expected to be an array-like table.
+--
+-- @param filter_func function
+--        A function that receives one element of the table and must return true
+--        to keep the element in the result, or false to discard it.
+--
+-- @return table
+--        A new table containing only the elements that passed the filter.
+--
+-- @example
+-- local routines = {
+--     { uniq_id = 1, name = "A" },
+--     { uniq_id = 2, name = "B" },
+-- }
+--
+-- local result = utils.tbl_filter(routines, function(r)
+--     return r.uniq_id == 2
+-- end)
+-- -- result = { { uniq_id = 2, name = "B" } }
+--
 function utils.tbl_filter(tbl,filter_func)
     local filtered = {}
     for r in all(tbl) do
@@ -33,20 +41,31 @@ function utils.tbl_filter(tbl,filter_func)
     return filtered
 end
 
---[[
-    edges_collision
-    - Check if an object would collide with the 0..127 screen bounds
-    - Returns true if any edge would be exceeded
-
-Sample of usage:
-
-```lua
-if not edges_collision({x=10,y=10,w=10,h=10,}) then
-    do something...
-end
-```
-]]
-function edges_collision(actor_obj)
+--- Checks whether an actor object is colliding with the screen edges.
+--
+-- This function determines if a rectangular actor exceeds the boundaries
+-- of a 128x128 PICO-8 screen. It returns `true` if any part of the actor
+-- is outside the valid screen coordinates (0 to 127), and `false` otherwise.
+--
+-- @param actor_obj table
+--        A table representing the actor, expected to have the following numeric fields:
+--        - `x`: the horizontal position (top-left corner)
+--        - `y`: the vertical position (top-left corner)
+--        - `w`: the width of the actor
+--        - `h`: the height of the actor
+--
+-- @return boolean
+--        Returns `true` if the actor is outside the screen boundaries, `false` otherwise.
+--
+-- @example
+-- local actor = { x = 120, y = 50, w = 16, h = 16 }
+-- local collided = utils.edges_collision(actor)
+-- -- collided == true because x + w = 136 > 127
+--
+-- local actor2 = { x = 50, y = 50, w = 16, h = 16 }
+-- local collided2 = utils.edges_collision(actor2)
+-- -- collided2 == false, actor fully inside screen
+function utils.edges_collision(actor_obj)
     if actor_obj.x + actor_obj.w > 127
             or actor_obj.x < 0
             or actor_obj.y < 0
