@@ -76,17 +76,31 @@ function utils.edges_collision(actor_obj)
     return false
 end
 
---[[
-    str_trim
-    - Remove leading and trailing spaces and tabs from a string
-
-Sample of usage:
-
-```lua
-local clean = str_trim("  hello\t") -- "hello"
-```
-]]
-function str_trim(s)
+--- Trims leading and trailing whitespace from a string.
+--
+-- This function removes spaces and tab characters from the start and end
+-- of the input string. It does not modify the original string but returns
+-- a new trimmed string.
+--
+-- @param s string
+--        The input string to be trimmed.
+--
+-- @return string
+--        A new string with leading and trailing whitespace removed.
+--
+-- @example
+-- local result1 = utils.str_trim("   hello world   ")
+-- -- result1 == "hello world"
+--
+-- local result2 = utils.str_trim("\t\thello\t")
+-- -- result2 == "hello"
+--
+-- local result3 = utils.str_trim("no_spaces")
+-- -- result3 == "no_spaces"
+--
+-- local result4 = utils.str_trim("   \t  ")
+-- -- result4 == "" (empty string)
+function utils.str_trim(s)
     -- Remove leading whitespace
     local start = 1
     while sub(s, start, start) == " " or sub(s, start, start) == "\t" do
@@ -129,7 +143,7 @@ function tbl_from_string(str_data,single_obj)
     local list = {}
     for line in all(split(str_data, '\n')) do -- split lines
         local obj = {}
-        line = str_trim(line)
+        line = utils.str_trim(line)
         if #line > 0 then -- remove possible extra lines
             for entry in all(split(line, ';')) do -- split lines
                 local parties = split(entry, '=')
