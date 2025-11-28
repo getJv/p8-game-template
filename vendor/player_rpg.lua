@@ -19,9 +19,9 @@ player_init()
 function player_init()
 
     player = actors_add_new(
-            tbl_from_string([[id=player;name=ana banana]],true),
-            tbl_from_string([[x=10;y=10;w=8;h=8]],true),
-            tbl_from_string([[curr_anim=idle;curr_anim_frames=12;curr_spr_index=1;spr_w=1;spr_h=1;idle={1,2};up={3,4};right={5,6};down={7,8};left={9,10};]],true)
+            utils.tbl_from_string([[id=player;name=ana banana]],true),
+            utils.tbl_from_string([[x=10;y=10;w=8;h=8]],true),
+            utils.tbl_from_string([[curr_anim=idle;curr_anim_frames=12;curr_spr_index=1;spr_w=1;spr_h=1;idle={1,2};up={3,4};right={5,6};down={7,8};left={9,10};]],true)
     )
 
 

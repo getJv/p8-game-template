@@ -6,16 +6,16 @@
 ]]
 
 -- store the group of dialogs
-dialogs = tbl_from_string([[ current=0;items={} ]],true)
+dialogs = utils.tbl_from_string([[ current=0;items={} ]],true)
 
 -- dialog_control function settings controls the current dialog
 dialog_control_initial = [[
     message=;current_index=0;typing_speed=2;waiting_confirmation_to_continue=true;
 ]]
-dialog_control = tbl_from_string(dialog_control_initial,true)
+dialog_control = utils.tbl_from_string(dialog_control_initial,true)
 
 -- _dialog_frame function settings. controls the dialog box layout
-dialog_frame_obj = tbl_from_string([[
+dialog_frame_obj = utils.tbl_from_string([[
     x=4;y=113;w=119;h=10;box_bg_color=5;box_border_color=3;box_txt_color=7;box_p_top=3;box_p_left=3;tab_name_h=8;tab_m_left=4;
 ]]
 ,true)
@@ -57,7 +57,7 @@ function dialog_create(dialog_id, speeches)
     dialogs.items[dialog_id] = {
         id = dialog_id,
         cb_with_speeches = function()
-            for i in all(tbl_from_string(speeches)) do
+            for i in all(utils.tbl_from_string(speeches)) do
                 local actor = actors[i.actor_id]
                 if not actor then
                     panic("no actor with id " .. i.actor_id)
@@ -104,7 +104,7 @@ dialog_speech
 ```
 ]]
 function dialog_speech(obj, text, typing_speed)
-    dialog_control = tbl_from_string(dialog_control_initial,true)
+    dialog_control = utils.tbl_from_string(dialog_control_initial,true)
 
     typing_speed = typing_speed or dialog_control.typing_speed
     local print_x_btn = true -- control the toggle animation to the button x

@@ -4,6 +4,6 @@
     Shared constants used across modules.
 ]]
 
-CONST = tbl_from_string([[
+CONST = utils.tbl_from_string([[
     letter_width=4;cell_size=8
 ]],true)

@@ -158,7 +158,7 @@ end
  - if you just have one-line remember to use the key access myResult[1]
  0 is single_obj is true it return a obj interad of a list
 ]]
-function tbl_from_string(str_data,single_obj)
+function utils.tbl_from_string(str_data,single_obj)
     local list = {}
     for line in all(split(str_data, '\n')) do -- split lines
         local obj = {}

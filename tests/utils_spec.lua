@@ -200,3 +200,80 @@ describe("utils.tbl_from_str_tbl", function()
         end)
     end
 end)
+
+describe("utils.tbl_from_string", function()
+
+    before_each(function()
+        dofile("./vendor/utils.lua")
+    end)
+
+    local test_cases = {
+        {
+            name = "parses multiple objects from multi-line string",
+            input = [[
+                id=potion;name=potion;available=3;cost=50;spr=11
+                id=antidote;name=antidote;available=5;cost=5;spr=12
+            ]],
+            single_obj = false,
+            expected = {
+                { id = "potion", name = "potion", available = "3", cost = "50", spr = "11" },
+                { id = "antidote", name = "antidote", available = "5", cost = "5", spr = "12" }
+            }
+        },
+        {
+            name = "returns first object if single_obj is true",
+            input = [[
+                id=potion;name=potion;available=3;cost=50;spr=11
+                id=antidote;name=antidote;available=5;cost=5;spr=12
+            ]],
+            single_obj = true,
+            expected = { id = "potion", name = "potion", available = "3", cost = "50", spr = "11" }
+        },
+        {
+            name = "ignores empty lines and trims spaces",
+            input = [[
+                a=1;b=2
+
+                c=3;d=4
+            ]],
+            single_obj = false,
+            expected = {
+                { a="1", b="2" },
+                { c="3", d="4" }
+            }
+        },
+        {
+            name = "converts boolean and empty values",
+            input = [[
+                flag1=true;flag2=false;empty_table={};empty_string=""
+            ]],
+            single_obj = false,
+            expected = {
+                { flag1 = true, flag2 = false, empty_table = {}, empty_string = "" }
+            }
+        },
+        {
+            name = "parses comma-separated list values",
+            input = [[
+                items={a,b,c};numbers={1,2,3}
+            ]],
+            single_obj = false,
+            expected = {
+                { items = {"a","b","c"}, numbers = {"1","2","3"} }
+            }
+        },
+        {
+            name = "returns empty table for empty string",
+            input = "",
+            single_obj = false,
+            expected = {}
+        }
+    }
+
+    for _, case in ipairs(test_cases) do
+        it(case.name, function()
+            local result = utils.tbl_from_string(case.input, case.single_obj)
+            assert.are.same(case.expected, result)
+        end)
+    end
+end)

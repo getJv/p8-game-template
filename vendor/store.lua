@@ -9,11 +9,11 @@ store_initial_values = [[
             is_open=false;cursor_spr=16;cursor_pos=1
         ]]
 
-store = tbl_from_string(store_initial_values,true)
+store = utils.tbl_from_string(store_initial_values,true)
 
 basket = {}
 stores = {}
-store_box = tbl_from_string([[
+store_box = utils.tbl_from_string([[
             x=20;y=20;w=88;h=88;bg_color=5;border_color=6;title=shopping;text_color=7;selected_color=12
         ]])[1]
 
@@ -24,7 +24,7 @@ store_box = tbl_from_string([[
 function store_create(store_id, tbl_string_options)
     stores[store_id] = function()
         store_routine_draw(
-                tbl_from_string(tbl_string_options)
+                utils.tbl_from_string(tbl_string_options)
         )
     end
 end

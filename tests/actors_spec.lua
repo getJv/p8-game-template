@@ -22,7 +22,7 @@ describe("actors.lua", function()
     end)]]
 
     it("actors_add_new with anim registers a DRAW routine and anim draw produces spr calls", function()
-        local anim = tbl_from_string([[curr_anim=idle;curr_anim_frames=2;curr_spr_index=1;spr_w=1;spr_h=1;idle={1,2,3}]], true)
+        local anim = utils.tbl_from_string([[curr_anim=idle;curr_anim_frames=2;curr_spr_index=1;spr_w=1;spr_h=1;idle={1,2,3}]], true)
         local a = actors_add_new({ id="a2", name="alice", color=8, in_scene=true, in_collision={} }, { x=1, y=2, w=8, h=8 }, anim)
         -- should have a draw routine queued
         assert.is_true(routines_has_type_of(ROUTINE_DRAW))

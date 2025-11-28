@@ -11,11 +11,11 @@ describe("store.lua", function()
         routines = {}
         basket = {}
         stores = {}
-        store = tbl_from_string([[is_open=false;cursor_spr=16;cursor_pos=1]], true)
+        store = utils.tbl_from_string([[is_open=false;cursor_spr=16;cursor_pos=1]], true)
     end)
 
     local function sample_options()
-        return tbl_from_string([[ id=potion;name=potion;available=2;cost=50;spr=15\n id=ant;name=antidote;available=1;cost=5;spr=15 ]])
+        return utils.tbl_from_string([[ id=potion;name=potion;available=2;cost=50;spr=15\n id=ant;name=antidote;available=1;cost=5;spr=15 ]])
     end
 
 end)
