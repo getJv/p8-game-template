@@ -118,16 +118,35 @@ function utils.str_trim(s)
 end
 
 
---[[ tbl_from_str_tbl
-Useful to create real tables from string tables;
-
-Example:
-```lua
-local string_tbl = "{1,2}"
-tbl_from_str_tbl(string_tbl,","),true) -- returns: {1,2}
-```
-]]
-function tbl_from_str_tbl(text_value,separator)
+--- Converts a string representation of a table into a Lua table.
+--
+-- This function expects a string with items enclosed in brackets (e.g., "[a;b;c]")
+-- and separated by the given `separator`. It removes the opening and closing brackets
+-- and splits the inner string by the separator to produce a table of elements.
+-- If the input is a number, it returns an empty table.
+--
+-- @param text_value string|number
+--        The input string to convert, or a number. Numbers will return an empty table.
+--
+-- @param separator string
+--        The character or substring used to split the inner string into elements.
+--
+-- @return table
+--        A table containing the elements extracted from the string. Returns `{}` for numbers or empty strings.
+--
+-- @example
+-- local t1 = utils.tbl_from_str_tbl("[a;b;c]", ";")
+-- -- t1 == {"a", "b", "c"}
+--
+-- local t2 = utils.tbl_from_str_tbl("[apple,banana,cherry]", ",")
+-- -- t2 == {"apple", "banana", "cherry"}
+--
+-- local t3 = utils.tbl_from_str_tbl(42, ";")
+-- -- t3 == {} (number input returns empty table)
+--
+-- local t4 = utils.tbl_from_str_tbl("[]", ";")
+-- -- t4 == {} (empty brackets)
+function utils.tbl_from_str_tbl(text_value,separator)
     if type(text_value) == "number" then
         return {}
     end
@@ -158,8 +177,8 @@ function tbl_from_string(str_data,single_obj)
                         value = {}
                     elseif value == '""' then
                         value=""
-                    elseif #tbl_from_str_tbl(value,",") > 1 then
-                        value = tbl_from_str_tbl(value,",")
+                    elseif #utils.tbl_from_str_tbl(value,",") > 1 then
+                        value = utils.tbl_from_str_tbl(value,",")
                     end
 
                     obj[parties[1]] = value

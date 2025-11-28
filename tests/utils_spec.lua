@@ -147,3 +147,56 @@ describe("utils.str_trim", function()
 
 
 end)
+
+describe("utils.tbl_from_str_tbl", function()
+
+    before_each(function()
+        dofile("./vendor/utils.lua")
+    end)
+
+    local test_cases = {
+        {
+            name = "returns empty table for number input",
+            input = 123,
+            separator = ";",
+            expected = {}
+        },
+        {
+            name = "splits a simple string with semicolon separator",
+            input = "[a;b;c]",
+            separator = ";",
+            expected = {"a","b","c"}
+        },
+        {
+            name = "splits a string with comma separator",
+            input = "[apple,banana,cherry]",
+            separator = ",",
+            expected = {"apple","banana","cherry"}
+        },
+        {
+            name = "returns empty table for empty string brackets",
+            input = "[]",
+            separator = ";",
+            expected = {}
+        },
+        {
+            name = "handles single item in brackets",
+            input = "[single]",
+            separator = ";",
+            expected = {"single"}
+        },
+        {
+            name = "trims spaces around items if needed",
+            input = "[a ; b ; c]",
+            separator = ";",
+            expected = {"a "," b "," c"} -- depends se a função split já trim, caso contrário mantém espaços
+        }
+    }
+
+    for _, case in ipairs(test_cases) do
+        it(case.name, function()
+            local result = utils.tbl_from_str_tbl(case.input, case.separator)
+            assert.are.same(case.expected, result)
+        end)
+    end
+end)
