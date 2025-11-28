@@ -1,6 +1,7 @@
 package.path = package.path .. ";./vendor/?.lua;./tests/utils/?.lua;"
 require("pico_mocks")
 
+
 describe("utils.tbl_filter", function()
 
     before_each(function()
@@ -274,6 +275,111 @@ describe("utils.tbl_from_string", function()
         it(case.name, function()
             local result = utils.tbl_from_string(case.input, case.single_obj)
             assert.are.same(case.expected, result)
+        end)
+    end
+end)
+
+describe("utils.actors_collision", function()
+
+    before_each(function()
+        dofile("./vendor/utils.lua")
+        dofile("./vendor/consts.lua")
+    end)
+
+    local test_cases = {
+        {
+            name = "returns true when actors overlap partially",
+            actor1 = { x=10, y=10, w=20, h=20 },
+            actor2 = { x=25, y=15, w=20, h=20 },
+            expected = true
+        },
+        {
+            name = "returns false when actors do not touch",
+            actor1 = { x=0, y=0, w=10, h=10 },
+            actor2 = { x=20, y=20, w=10, h=10 },
+            expected = false
+        },
+        {
+            name = "returns true when one actor is completely inside another",
+            actor1 = { x=5, y=5, w=20, h=20 },
+            actor2 = { x=10, y=10, w=5, h=5 },
+            expected = true
+        },
+        {
+            name = "returns false when actors touch edges but do not overlap",
+            actor1 = { x=0, y=0, w=10, h=10 },
+            actor2 = { x=10, y=0, w=10, h=10 },
+            expected = false
+        },
+        {
+            name = "returns true when actors touch partially at corner",
+            actor1 = { x=0, y=0, w=10, h=10 },
+            actor2 = { x=5, y=5, w=10, h=10 },
+            expected = true
+        },
+        {
+            name = "returns false when actors are far apart",
+            actor1 = { x=50, y=50, w=10, h=10 },
+            actor2 = { x=100, y=100, w=20, h=20 },
+            expected = false
+        }
+    }
+
+    for _, case in ipairs(test_cases) do
+        it(case.name, function()
+            local result = utils.actors_collision(case.actor1, case.actor2)
+            assert.are.equal(case.expected, result)
+        end)
+    end
+end)
+
+describe("utils.map_collision", function()
+
+    before_each(function()
+        dofile("./vendor/utils.lua")
+    end)
+
+    local test_cases = {
+        {
+            name = "returns false when fget returns false",
+            actor = { x = 10, y = 16 },
+            flag = 1,
+            mock_tile = 5,
+            fget_value = false,
+            expected = false,
+        },
+    }
+
+    for _, case in ipairs(test_cases) do
+        it(case.name, function()
+            -- Override mget to capture arguments and return mock tile
+            local called_x, called_y
+
+            function mget(x, y)
+                called_x = x
+                called_y = y
+                return case.mock_tile
+            end
+
+            -- Override fget to return expected value
+            function fget(tile, flag)
+                assert.are.equal(case.mock_tile, tile)
+                assert.are.equal(case.flag, flag)
+                return case.fget_value
+            end
+
+            local result = utils.map_collision(case.actor, case.flag)
+
+            -- check collision result
+            assert.are.equal(case.expected, result)
+
+            -- check tile coordinate calculations when expected
+            if case.expected_tile_x then
+                assert.are.equal(case.expected_tile_x, called_x)
+            end
+            if case.expected_tile_y then
+                assert.are.equal(case.expected_tile_y, called_y)
+            end
         end)
     end
 end)

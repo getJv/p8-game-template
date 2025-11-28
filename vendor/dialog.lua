@@ -60,7 +60,7 @@ function dialog_create(dialog_id, speeches)
             for i in all(utils.tbl_from_string(speeches)) do
                 local actor = actors[i.actor_id]
                 if not actor then
-                    panic("no actor with id " .. i.actor_id)
+                    utils.panic("no actor with id " .. i.actor_id)
                 end
                 dialog_speech(actor,i.speech)
             end

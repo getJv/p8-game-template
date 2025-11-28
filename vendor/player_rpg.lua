@@ -100,12 +100,12 @@ function player_controls_update()
         return
     end
 
-    player.in_collision["store_man"] = actors_collision(new_actor_coords,actors["store_man"])
+    player.in_collision["store_man"] = utils.actors_collision(new_actor_coords,actors["store_man"])
     if player.in_collision["store_man"] then
         return
     end
 
-    player.in_collision["lake_border"] = map_collision(new_actor_coords,0)
+    player.in_collision["lake_border"] = utils.map_collision(new_actor_coords,0)
     if player.in_collision["lake_border"] then
         return
     end

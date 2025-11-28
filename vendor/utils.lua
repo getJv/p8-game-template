@@ -153,11 +153,44 @@ function utils.tbl_from_str_tbl(text_value,separator)
     return split(sub(text_value,2,#text_value-1),separator)
 end
 
---[[
- - convert a multline string in a arraylist of objects
- - if you just have one-line remember to use the key access myResult[1]
- 0 is single_obj is true it return a obj interad of a list
-]]
+--- Parses a multi-line string into a table of objects.
+--
+-- This function converts a string containing lines of `key=value` pairs
+-- separated by semicolons (`;`) into a Lua table. Each line becomes an object.
+-- Values are automatically converted to the appropriate type:
+-- - `"true"` → boolean `true`
+-- - `"false"` → boolean `false`
+-- - `"{}"` → empty table `{}`
+-- - `""` → empty string `""`
+-- - comma-separated strings (e.g., `{a,b,c}`) → table of strings
+--
+-- Leading and trailing whitespace in each line is removed.
+-- Empty lines are ignored.
+--
+-- @param str_data string
+--        The input string containing one or more lines of `key=value` pairs.
+--
+-- @param single_obj boolean
+--        If `true`, only the first parsed object is returned.
+--        If `false` or `nil`, a table containing all objects is returned.
+--
+-- @return table
+--        A table of parsed objects. Each object is a table of key-value pairs.
+--        Returns a single object if `single_obj` is true.
+--
+-- @example
+-- local data = [[
+--     id=potion;name=potion;available=3;cost=50;spr=11
+--     id=antidote;name=antidote;available=5;cost=5;spr=12
+-- ]]
+-- local result = utils.tbl_from_string(data, false)
+-- -- result == {
+-- --     { id="potion", name="potion", available="3", cost="50", spr="11" },
+-- --     { id="antidote", name="antidote", available="5", cost="5", spr="12" }
+-- -- }
+--
+-- local first = utils.tbl_from_string(data, true)
+-- -- first == { id="potion", name="potion", available="3", cost="50", spr="11" }
 function utils.tbl_from_string(str_data,single_obj)
     local list = {}
     for line in all(split(str_data, '\n')) do -- split lines
@@ -193,29 +226,102 @@ function utils.tbl_from_string(str_data,single_obj)
     return list
 end
 
---[[ panic
- - is a fatal error thal will stop the game.
- - it helps the developer to understand with config is missing
-]]
-function panic(message)
+--- Displays a fatal error message and stops the game.
+--
+-- This function is intended to be used by developers to indicate a critical
+-- error that cannot be recovered from, such as missing configuration,
+-- invalid data, or other unrecoverable conditions.
+-- It clears the screen, prints the error message at a fixed position,
+-- and stops execution immediately.
+--
+-- @param message string
+--        The error message to display on the screen.
+--
+-- @usage
+-- panic("Configuration file is missing!")
+-- -- The game screen is cleared, the message is displayed, and the game stops.
+--
+-- @note
+-- This function is intended for debugging or fatal error handling during
+-- development. In a production environment, consider more graceful
+-- error handling or logging.
+function utils.panic(message)
     cls()
     print(message,10,10,7)
     stop()
 end
 
-
-function actors_collision(actor_1,actor_2)
+--- Checks whether two rectangular actors are colliding.
+--
+-- This function performs an axis-aligned bounding box (AABB) collision check.
+-- Each actor is expected to have the properties:
+-- `x` (horizontal position), `y` (vertical position), `w` (width), and `h` (height).
+-- Returns `true` if the rectangles overlap and `false` otherwise.
+--
+-- @param actor_1 table
+--        The first actor with fields `x`, `y`, `w`, `h`.
+--
+-- @param actor_2 table
+--        The second actor with fields `x`, `y`, `w`, `h`.
+--
+-- @return boolean
+--        `true` if the two actors' rectangles overlap, `false` otherwise.
+--
+-- @example
+-- local a1 = { x = 10, y = 10, w = 20, h = 20 }
+-- local a2 = { x = 25, y = 15, w = 20, h = 20 }
+-- local result = utils.actors_collision(a1, a2)
+-- -- result == true (they partially overlap)
+--
+-- local a3 = { x = 0, y = 0, w = 10, h = 10 }
+-- local a4 = { x = 20, y = 20, w = 10, h = 10 }
+-- local result2 = utils.actors_collision(a3, a4)
+-- -- result2 == false (they do not overlap)
+function utils.actors_collision(actor_1,actor_2)
      return actor_1.x  < actor_2.x+actor_2.w and
             actor_1.x+actor_1.w  > actor_2.x and
             actor_1.y  < actor_2.y+actor_2.h and
             actor_1.y+actor_1.h  > actor_2.y
 end
 
-function map_collision( actor_obj, flag )
+
+--- Checks whether an actor collides with a map tile that has a specific flag.
+--
+-- This function performs a PICO-8 style tile-flag collision check.
+--
+-- It calculates the tile position based on the actor's coordinates,
+-- retrieves the tile using `mget`, and checks if the tile has the flag set
+-- using `fget`.
+--
+-- The collision check looks at the tile located at:
+--   tile_x = (actor_obj.x + 1) / CONST.cell_size
+--   tile_y = actor_obj.y / CONST.cell_size
+--
+-- `+1` in the x coordinate compensates for the way PICO-8 draws sprites
+-- relative to tile boundaries, preventing boundary off-by-one errors.
+--
+-- @param actor_obj table
+--        The actor object with fields:
+--          - `x`: horizontal position in pixels
+--          - `y`: vertical position in pixels
+--        Optionally can include width/height, though unused here.
+--
+-- @param flag number
+--        The flag index (0–7) to check in the tile metadata.
+--
+-- @return boolean
+--        `true` if the tile at the actor's position has the flag set,
+--        `false` otherwise.
+--
+-- @example
+-- CONST = { cell_size = 8 }
+--
+-- function mget(x, y) return 12 end
+-- function fget(tile, flag) return tile == 12 and flag == 1 end
+--
+-- local actor = { x = 10, y = 16 }
+-- local result = map_collision(actor, 1)
+-- -- result == true  (tile 12 has flag 1)
+function utils.map_collision( actor_obj, flag )
     return fget( mget((actor_obj.x +1)/CONST.cell_size,actor_obj.y/CONST.cell_size), flag )
 end
-
---[[
-if package then
-    return utils
-end]]
