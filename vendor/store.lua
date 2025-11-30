@@ -5,9 +5,7 @@
     routines. Uses a string-to-table parser for configuration.
 ]]
 
-store_initial_values = [[
-            is_open=false;cursor_spr=16;cursor_pos=1
-        ]]
+store_initial_values = [[ is_open=false;cursor_spr=16;cursor_pos=1 ]]
 
 store = utils.tbl_from_string(store_initial_values,true)
 
@@ -17,10 +15,28 @@ store_box = utils.tbl_from_string([[
             x=20;y=20;w=88;h=88;bg_color=5;border_color=6;title=shopping;text_color=7;selected_color=12
         ]])[1]
 
---[[ store_create
- - Register the store in a list of stores and prepare the routine callback
-
-]]
+--- Registers a new store in the system.
+---
+--- This function creates an entry in the `stores` table using the provided identifier.
+--- Each registered store becomes a function that, when executed,
+--- calls `store_routine_draw` with the table resulting from
+--- `utils.tbl_from_string(tbl_string_options)`.
+---
+--- @param store_id string
+---     Unique identifier for the store. It will be used as the key in the global `stores` table.
+---
+--- @param tbl_string_options string
+---     A string representing the store options that will be converted to a table
+---     before being passed to `store_routine_draw`. The format depends on
+---     `utils.tbl_from_string`, typically "key=value,key=value".
+---
+--- @return nil
+---     Does not return a value. Only creates or updates a function in `stores[store_id]`.
+---
+--- @usage
+---     store_create("store_man", "x=10,y=20")
+---     -- Later you can call it:
+---     stores["store_man"]()
 function store_create(store_id, tbl_string_options)
     stores[store_id] = function()
         store_routine_draw(
