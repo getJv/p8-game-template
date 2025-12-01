@@ -63,6 +63,7 @@ describe("store functions", function()
         dofile("./vendor/utils.lua")
         dofile("./tests/utils/helpers.lua")
         dofile("././vendor/consts.lua")
+        dofile("./vendor/routines.lua")
         dofile("./vendor/store.lua")
 
     end)
@@ -90,11 +91,51 @@ describe("store functions", function()
 
     end  )
 
-    it("store_close call checkout, close store and reset basket",function()
+    it("store_close with true call checkout",function()
+        stub(_G, "print")
+        store_close(true)
+        assert.stub(print).was_called(1)
+        assert.stub(print).was_called_with(
+                "check out not implemented"
+        )
 
-    -- not implemented.
+        assert.are.same({},basket)
+        assert.are.same(false,store.is_open)
 
 
     end  )
+
+    it("store_close with false call checkout",function()
+        stub(_G, "print")
+        store_close(false)
+        assert.stub(print).was_called(0)
+
+        assert.are.same({},basket)
+        assert.are.same(false,store.is_open)
+
+    end  )
+
+
+    it("store_open add the store to the routines queue",function()
+
+        stub(_G, "routines_add_new")
+
+        local store_id = "a_store_id"
+        local test_function = function()  end
+        stores[store_id] = test_function
+
+        store_open(store_id)
+
+        assert.stub(routines_add_new).was_called(1)
+        assert.stub(routines_add_new).was_called_with(
+                test_function,
+                "draw",
+                store_id
+        )
+
+    end  )
+
+
+
 
 end)

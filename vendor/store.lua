@@ -45,6 +45,29 @@ function store_create(store_id, tbl_string_options)
     end
 end
 
+--- Closes the current store session.
+---
+--- This function handles the logic for closing a store. If the `confirmed`
+--- parameter is true, it prints a placeholder message indicating that checkout
+--- functionality is not yet implemented. Regardless of confirmation, the
+--- function clears the global `basket` and marks the store as closed.
+---
+--- @param confirmed boolean
+---     Whether the user has confirmed closing the store. When true, a message
+---     is printed notifying that checkout is not implemented.
+---
+--- @return nil
+---     No return value. Side effects: prints a message (optional), clears
+---     the global `basket`, and sets `store.is_open` to false.
+---
+--- @sideeffects
+---     - Mutates the global `basket` table, resetting it to an empty table.
+---     - Sets `store.is_open` to `false`.
+---     - May print a message to the screen when `confirmed == true`.
+---
+--- @usage
+---     store_close(false)   -- closes silently
+---     store_close(true)    -- prints placeholder message, then closes
 function store_close(confirmed)
     if confirmed then
         print("check out not implemented")
@@ -53,11 +76,42 @@ function store_close(confirmed)
     store.is_open = false
 end
 
+
+--- Opens a store routine and registers it in the routines queue.
+---
+--- This function retrieves the store handler associated with the given
+--- `store_id` and registers it as a new routine using `routines_add_new`.
+--- The routine is scheduled with the draw phase (`ROUTINE_DRAW`) and is
+--- identified by the same `store_id`.
+---
+--- It does not perform validation on `store_id`, so it assumes that
+--- `stores[store_id]` already exists and is a callable function.
+---
+--- @param store_id string
+---     The identifier of the store to open. Must correspond to a function
+---     previously stored in the global `stores` table.
+---
+--- @return nil
+---     No return value. The function only triggers a side effect by
+---     registering a new routine.
+---
+--- @sideeffects
+---     - Calls `routines_add_new(store_function, ROUTINE_DRAW, store_id)`
+---       where `store_function` is `stores[store_id]`.
+---     - Relies on the global `stores` table and global `ROUTINE_DRAW` constant.
+---
+--- @errors
+---     - If `stores[store_id]` is nil or not a function, the behavior of
+---       `routines_add_new` may lead to runtime errors.
+---
+--- @usage
+---     -- Assuming stores["shop"] contains a function
+---     store_open("shop")
 function store_open(store_id)
     routines_add_new(
             stores[store_id],
             ROUTINE_DRAW,
-            'shopping_id'
+            store_id
     )
 end
 
