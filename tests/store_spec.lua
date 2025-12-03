@@ -135,7 +135,50 @@ describe("store functions", function()
 
     end  )
 
+end)
 
 
+describe("store_routine_update", function()
+
+    local mock = nil
+    local store_options = [[
+    id=potion;name=potion;available=3;cost=50;spr=11
+    id=antidote;name=antidote;available=5;cost=5;spr=12
+    ]]
+    local btnp
+    local iterations
+
+    before_each(function()
+        mock = require("luassert.mock")
+
+        -- intentionally reload the tested file
+        dofile("./vendor/utils.lua")
+        dofile("./tests/utils/helpers.lua")
+        dofile("././vendor/consts.lua")
+        dofile("./vendor/routines.lua")
+        dofile("./vendor/store.lua")
+        dofile("./vendor/store.lua")
+
+
+
+        -- mock global yield to set store.is_open = false on 5th call
+        iterations = 0
+        _G.yield = spy.new(function()
+            iterations = iterations + 1
+            if iterations == 5 then
+                store.is_open = false
+            end
+        end)
+
+    end)
+
+   it("store_routine_update stops when yield is called 5 times",function()
+       store.cursor_pos = 1
+       store.is_open = true
+       local options = utils.tbl_from_string(store_options)
+
+       store_routine_update(options)
+       assert.spy(_G.yield).was_called(5)
+   end  )
 
 end)

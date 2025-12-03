@@ -99,16 +99,3 @@ function fget(tile, flag)
     return false
 end
 
--- coroutine mappings
-function cocreate(fn)
-    return coroutine.create(fn)
-end
-function coresume(co)
-    return coroutine.resume(co)
-end
-function costatus(co)
-    return coroutine.status(co)
-end
-function yield()
-    return coroutine.yield()
-end
